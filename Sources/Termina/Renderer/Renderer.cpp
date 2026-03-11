@@ -4,6 +4,7 @@
 #include "ImGui/imgui_impl_glfw.h"
 #include "Renderer/Passes/ImGuiPass.hpp"
 #include "Renderer/Passes/TrianglePass.hpp"
+#include "Renderer/UIUtils.hpp"
 
 namespace Termina {
     RendererSystem::RendererSystem(Window* window)
@@ -24,6 +25,7 @@ namespace Termina {
         // Initialize ImGui
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
+        ImGui::StyleColorsLight();
 
         ImGuiIO& io = ImGui::GetIO();
         io.BackendRendererName = "Termina ImGui Renderer";
@@ -32,6 +34,8 @@ namespace Termina {
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
         ImGui_ImplGlfw_InitForVulkan(window->GetHandle(), true);
+
+        UIUtils::Setup();
     }
 
     RendererSystem::~RendererSystem()

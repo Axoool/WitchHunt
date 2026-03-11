@@ -10,6 +10,7 @@ namespace Termina {
         TN_ASSERT(glfwInit(), "Failed to initialize GLFW");
 
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+        glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
 
         m_Window = glfwCreateWindow(width, height, title, nullptr, nullptr);
         TN_ASSERT(m_Window, "Failed to create GLFW window");
