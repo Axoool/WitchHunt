@@ -7,6 +7,9 @@ namespace Termina {
     {
         m_Device = RendererDevice::Create();
         m_Surface = m_Device->CreateSurface(window);
+
+        m_CurrentWidth = window->GetWidth();
+        m_CurrentHeight = window->GetHeight();
     }
 
     RendererSystem::~RendererSystem()
@@ -19,6 +22,12 @@ namespace Termina {
 
     void RendererSystem::Render(float deltaTime)
     {
+        if (m_Window->GetWidth() != m_CurrentWidth || m_Window->GetHeight() != m_CurrentHeight) {
+            m_Surface->Resize(m_Window->GetWidth(), m_Window->GetHeight());
+            m_CurrentWidth = m_Window->GetWidth();
+            m_CurrentHeight = m_Window->GetHeight();
+        }
+
         uint32 frameIndex = m_Surface->GetFrameIndex();
 
         RenderContext* context = m_Surface->BeginFrame();

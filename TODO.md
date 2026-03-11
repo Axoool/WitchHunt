@@ -25,7 +25,7 @@
 
 ## DAY 1
 
-- Resizing and events
+- Resizing
 - Plug ImGui and Im3D
 - Dockspace setup for editor
 - World system

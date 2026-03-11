@@ -30,6 +30,9 @@ namespace Termina {
 	    RendererDevice* m_Device = nullptr;
 	    RendererSurface* m_Surface = nullptr;
 
+        int m_CurrentWidth = 0;
+        int m_CurrentHeight = 0;
+
         std::vector<RenderCallback> m_RenderCallbacks;
     };
 }
