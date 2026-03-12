@@ -3,10 +3,13 @@
 #include "Core/Application.hpp"
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_impl_glfw.h"
+#include "Renderer/Components/CameraComponent.hpp"
 #include "Renderer/Passes/CubesPass.hpp"
 #include "Renderer/Passes/ImGuiPass.hpp"
 #include "Renderer/Passes/TrianglePass.hpp"
 #include "Renderer/UIUtils.hpp"
+#include "World/Component.hpp"
+#include "World/ComponentRegistry.hpp"
 #include "World/WorldSystem.hpp"
 
 namespace Termina {
@@ -104,7 +107,7 @@ namespace Termina {
                 .Device = m_Device,
                 .Surface = m_Surface,
                 .Ctx = context,
-                
+
                 .Uploader = m_GPUUploader,
                 .Allocator = m_GPUAllocator,
                 .ViewCache = m_ResourceViewCache,
@@ -124,6 +127,16 @@ namespace Termina {
             callback(m_Device, m_Surface, deltaTime);
         }
         m_Surface->EndFrame();
+    }
+
+    void RendererSystem::RegisterComponents()
+    {
+        ComponentRegistry::Get().Register<CameraComponent>("Camera Component");
+    }
+
+    void RendererSystem::UnregisterComponents()
+    {
+        ComponentRegistry::Get().UnregisterByName("Camera Component");
     }
 
     void RendererSystem::BakeTimeline()

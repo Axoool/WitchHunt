@@ -18,6 +18,9 @@ namespace Termina {
         /// Sets the volume of the audio engine.
         void SetVolume(float volume) { ma_engine_set_volume(&m_Engine, volume); }
 
+        void RegisterComponents() override;
+        void UnregisterComponents() override;
+
         UpdateFlags GetUpdateFlags() const override { return UpdateFlags::UpdateDuringEditor; }
     	std::string GetName() const override { return "Audio System"; }
         int GetPriority() const override { return 0; }

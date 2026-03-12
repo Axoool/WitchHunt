@@ -4,7 +4,10 @@
 #include "Termina/Renderer/UIUtils.hpp"
 #include <Termina/World/Actor.hpp>
 #include <Termina/World/ComponentRegistry.hpp>
+#include <Termina/World/Components/Transform.hpp>
 
+#include <algorithm>
+#include <cctype>
 #include <cstring>
 #include <typeindex>
 #include <unordered_set>
@@ -37,6 +40,7 @@ void InspectorPanel::OnImGuiRender()
     ImGui::Separator();
 
     // Components — each gets a collapsing header and calls its own Inspect()
+    Termina::Component* compToRemove = nullptr;
     for (auto* comp : actor->GetAllComponents())
     {
         std::string compName =
@@ -46,14 +50,22 @@ void InspectorPanel::OnImGuiRender()
 
         ImGui::PushID(comp);
         Termina::UIUtils::PushStylized();
-        if (ImGui::TreeNodeEx(compName.c_str(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed)) {
-            Termina::UIUtils::PopStylized();
+        bool open = ImGui::TreeNodeEx(compName.c_str(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed);
+        Termina::UIUtils::PopStylized();
+        if (ImGui::BeginPopupContextItem("##CompCtx")) {
+            bool isTransform = dynamic_cast<Termina::Transform*>(comp) != nullptr;
+            if (ImGui::MenuItem("Delete Component", nullptr, false, !isTransform))
+                compToRemove = comp;
+            ImGui::EndPopup();
+        }
+        if (open) {
             comp->Inspect();
             ImGui::TreePop();
-        } else
-            Termina::UIUtils::PopStylized();
+        }
         ImGui::PopID();
     }
+    if (compToRemove)
+        actor->RemoveComponentRaw(compToRemove);
 
     ImGui::Separator();
 
@@ -63,15 +75,36 @@ void InspectorPanel::OnImGuiRender()
         existing.insert(typeid(*c));
 
     Termina::UIUtils::PushStylized();
-    if (Termina::UIUtils::Button("Add Component"))
+    if (Termina::UIUtils::Button("Add Component")) {
+        m_ComponentSearchBuf[0] = '\0';
         ImGui::OpenPopup("##AddComponent");
+    }
     Termina::UIUtils::PopStylized();
 
     if (ImGui::BeginPopup("##AddComponent")) {
+        ImGui::SetNextItemWidth(-1.0f);
+        if (ImGui::IsWindowAppearing())
+            ImGui::SetKeyboardFocusHere();
+        ImGui::InputText("##CompSearch", m_ComponentSearchBuf, sizeof(m_ComponentSearchBuf));
+
+        ImGui::Separator();
+
+        // Build lowercase filter string
+        std::string filter = m_ComponentSearchBuf;
+        std::transform(filter.begin(), filter.end(), filter.begin(),
+            [](unsigned char c) { return std::tolower(c); });
+
         std::type_index selectedType = typeid(void);
         Termina::ComponentRegistry::Get().ForEach([&](const Termina::ComponentRegistry::Entry& entry) {
             if (existing.count(entry.Type))
                 return true;
+            if (!filter.empty()) {
+                std::string name = entry.Name;
+                std::transform(name.begin(), name.end(), name.begin(),
+                    [](unsigned char c) { return std::tolower(c); });
+                if (name.find(filter) == std::string::npos)
+                    return true;
+            }
             if (ImGui::MenuItem(entry.Name.c_str()))
                 selectedType = entry.Type;
             return true;

@@ -9,4 +9,7 @@ public:
         : Panel("Inspector", context) {}
 
     void OnImGuiRender() override;
+
+private:
+    char m_ComponentSearchBuf[128] = {};
 };

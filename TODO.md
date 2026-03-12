@@ -25,16 +25,14 @@
 
 ## TODO
 
-### Thursday
-- Scripting system (how tho)
-- Asset system (ref counting/caching)
-
 ### Friday
-- Rendering 3D models (static GLTF) + mesh components
 - 3D audio + audio components
+- Change camera to main camera on play
+- Asset system (ref counting/caching)
+- Textures
+- Rendering 3D models (static GLTF) + mesh component
 - Simple HDR forward pass + tonemap via PassIO + debug renderer
 - Physics system (implement different types of colliders)
-- Project system (simple)
 
 ### Saturday
 - Microfacet BRDF
@@ -42,14 +40,19 @@
 - IBL
 - CSM
 - TAA
-- Vulkan TLAS/BLAS/AS Build
-- RT shadows
+- Bloom
 - Runtime renders to backbuffer
 
 ## Sunday
+- Material asset
+- Asset compression and packing on export
+- Project system
+
+## After
+- Vulkan and Metal TLAS/BLAS/AS Build
+- RT shadows
 - GPU driven frustum cull
 - Shadow atlas
 - DOF
-- Bloom
 - Batched 2D sprite renderer
 - Text renderer

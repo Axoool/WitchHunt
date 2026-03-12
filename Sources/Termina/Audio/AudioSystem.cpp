@@ -48,4 +48,13 @@ namespace Termina {
         ma_engine_uninit(&m_Engine);
         ma_device_uninit(&m_Device);
     }
-}
+
+    void AudioSystem::RegisterComponents()
+    {
+        // TODO
+    }
+
+    void AudioSystem::UnregisterComponents()
+    {
+        // TODO
+    }

@@ -61,7 +61,8 @@ void EditorApplication::OnUpdate(float dt)
     auto* renderer = GetSystem<Termina::RendererSystem>();
     float w = static_cast<float>(m_Window->GetWidth());
     float h = static_cast<float>(m_Window->GetHeight());
-    m_Camera.Update(dt, w, h);
+    if (!ImGui::GetIO().WantCaptureKeyboard)
+        m_Camera.Update(dt, w, h);
     renderer->SetCurrentCamera(m_Camera);
 
     RenderDockspace();

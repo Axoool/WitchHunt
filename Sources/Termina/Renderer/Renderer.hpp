@@ -32,6 +32,9 @@ namespace Termina {
         void SetCurrentCamera(const Camera& camera) { m_CurrentCamera = camera; }
         const Camera& GetCurrentCamera() const { return m_CurrentCamera; }
 
+        void RegisterComponents() override;
+        void UnregisterComponents() override;
+
         UpdateFlags GetUpdateFlags() const override {
             return UpdateFlags::RenderUpdateDuringEditor | UpdateFlags::UpdateDuringEditor;
         }
