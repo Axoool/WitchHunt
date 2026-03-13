@@ -1,6 +1,8 @@
 #include "AudioSourceComponent.hpp"
+#include "Asset/AssetUtils.hpp"
 #include "Audio/AudioSystem.hpp"
 #include "Core/Application.hpp"
+#include "Renderer/UIUtils.hpp"
 #include "World/Components/Transform.hpp"
 #include "World/Actor.hpp"
 #include "Asset/AssetSystem.hpp"
@@ -65,6 +67,12 @@ namespace Termina {
 
     void AudioSourceComponent::Inspect()
     {
+        UIUtils::TryReceiveAsset<AudioAsset>(m_AudioAsset, [&](const std::string& path) {
+            if (AssetUtils::IsAssetType(path, AssetType::Audio)) {
+                OnAssetChange(path);
+            }
+        });
+        ImGui::Separator();
         ImGui::Checkbox("Play on Awake", &m_PlayOnAwake);
         ImGui::Checkbox("Loop", &m_Loop);
         ImGui::Checkbox("Spatialized", &m_Spatialized);

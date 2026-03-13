@@ -58,7 +58,7 @@ namespace Termina {
             {
                 uint32 id = pathIt->second;
                 m_Records[id].RefCount++;
-                return AssetHandle<T>(id, this);
+                return AssetHandle<T>(id, this, path);
             }
 
             auto loaderIt = m_Loaders.find(std::type_index(typeid(T)));
@@ -78,7 +78,7 @@ namespace Termina {
             m_Records[id]   = std::move(record);
             m_PathToID[path] = id;
 
-            return AssetHandle<T>(id, this);
+            return AssetHandle<T>(id, this, path);
         }
 
         // -----------------------------------------------------------------
@@ -197,7 +197,7 @@ namespace Termina {
 
     template<typename T>
     AssetHandle<T>::AssetHandle(const AssetHandle& other)
-        : m_ID(other.m_ID), m_System(other.m_System)
+        : m_ID(other.m_ID), m_System(other.m_System), m_Path(other.m_Path)
     {
         IncRef();
     }
@@ -210,6 +210,7 @@ namespace Termina {
             Reset();
             m_ID     = other.m_ID;
             m_System = other.m_System;
+            m_Path   = other.m_Path;
             IncRef();
         }
         return *this;
@@ -217,7 +218,7 @@ namespace Termina {
 
     template<typename T>
     AssetHandle<T>::AssetHandle(AssetHandle&& other) noexcept
-        : m_ID(other.m_ID), m_System(other.m_System)
+        : m_ID(other.m_ID), m_System(other.m_System), m_Path(std::move(other.m_Path))
     {
         other.m_ID     = 0;
         other.m_System = nullptr;
@@ -231,6 +232,7 @@ namespace Termina {
             Reset();
             m_ID     = other.m_ID;
             m_System = other.m_System;
+            m_Path   = std::move(other.m_Path);
             other.m_ID     = 0;
             other.m_System = nullptr;
         }

@@ -1,7 +1,9 @@
 #include "UIUtils.hpp"
 #include "Core/Logger.hpp"
 #include "ImGui/imgui.h"
+#include "World/Actor.hpp"
 #include <string>
+#include <filesystem>
 
 namespace Termina {
     UIUtils::Data UIUtils::sData;
@@ -142,8 +144,19 @@ namespace Termina {
         }
     }
 
-    bool UIUtils::TryReceiveAsset(const std::function<void(const std::string&)>& callback)
+    bool UIUtils::TryReceiveAssetImpl(const std::string& current, const std::function<void(const std::string&)>& callback)
     {
+        const std::string label = current.empty()
+            ? "No Asset"
+            : std::filesystem::path(current).filename().string();
+
+        ImVec2 size = ImVec2(ImGui::GetContentRegionAvail().x, 0);
+        ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyleColorVec4(ImGuiCol_FrameBg));
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImGui::GetStyleColorVec4(ImGuiCol_FrameBgHovered));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImGui::GetStyleColorVec4(ImGuiCol_FrameBgActive));
+        ImGui::Button(label.c_str(), size);
+        ImGui::PopStyleColor(3);
+
         if (ImGui::BeginDragDropTarget())
         {
             if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSET_PATH"))
@@ -168,8 +181,17 @@ namespace Termina {
         }
     }
 
-    bool UIUtils::TryReceiveActor(const std::function<void(Actor*)>& callback)
+    bool UIUtils::TryReceiveActor(Actor* current, const std::function<void(Actor*)>& callback)
     {
+        const std::string label = current ? current->GetName() : "No Actor";
+
+        ImVec2 size = ImVec2(ImGui::GetContentRegionAvail().x, 0);
+        ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyleColorVec4(ImGuiCol_FrameBg));
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImGui::GetStyleColorVec4(ImGuiCol_FrameBgHovered));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImGui::GetStyleColorVec4(ImGuiCol_FrameBgActive));
+        ImGui::Button(label.c_str(), size);
+        ImGui::PopStyleColor(3);
+
         if (ImGui::BeginDragDropTarget())
         {
             if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ACTOR_PTR"))

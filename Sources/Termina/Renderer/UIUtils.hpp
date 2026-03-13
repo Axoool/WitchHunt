@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ImGui/imgui.h>
+#include <Termina/Asset/AssetHandle.hpp>
 #include <string>
 #include <functional>
 
@@ -37,14 +38,20 @@ namespace Termina {
 
         // Drag and drop — assets (path-based)
         static void AssetPickerSource(const std::string& path);
-        static bool TryReceiveAsset(const std::function<void(const std::string&)>& callback);
+
+        template<typename T>
+        static bool TryReceiveAsset(const AssetHandle<T>& handle, const std::function<void(const std::string&)>& callback)
+        {
+            return TryReceiveAssetImpl(handle.GetPath(), callback);
+        }
 
         // Drag and drop — actors (pointer-based)
         static void ActorPickerSource(Actor* actor);
-        static bool TryReceiveActor(const std::function<void(Actor*)>& callback);
+        static bool TryReceiveActor(Actor* current, const std::function<void(Actor*)>& callback);
 
     private:
         static void SetTheme();
+        static bool TryReceiveAssetImpl(const std::string& currentPath, const std::function<void(const std::string&)>& callback);
 
         static struct Data {
             ImFont* RegularFont;

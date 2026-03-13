@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Termina/Core/Common.hpp>
+#include <string>
 
 namespace Termina {
 
@@ -31,11 +32,13 @@ namespace Termina {
         bool IsValid()    const { return m_ID != 0 && m_System != nullptr; }
         explicit operator bool() const { return IsValid(); }
 
+        const std::string& GetPath() const { return m_Path; }
+
     private:
         friend class AssetSystem;
 
-        AssetHandle(uint32 id, AssetSystem* system)
-            : m_ID(id), m_System(system)
+        AssetHandle(uint32 id, AssetSystem* system, std::string path)
+            : m_ID(id), m_System(system), m_Path(std::move(path))
         {
         }
 
@@ -44,6 +47,7 @@ namespace Termina {
 
         uint32       m_ID     = 0;
         AssetSystem* m_System = nullptr;
+        std::string  m_Path;
     };
 
 } // namespace Termina
