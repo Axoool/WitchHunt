@@ -27,6 +27,11 @@ public:
 private:
     void RenderDockspace();
 
+    // Returns false if the user cancelled (e.g. dismissed the save dialog).
+    bool SaveWorld(bool forceDialog = false);
+    void OpenWorld();
+    void NewWorld();
+
     EditorContext m_Context;
     EditorCamera  m_Camera;
     std::vector<std::unique_ptr<Panel>> m_Panels;

@@ -19,7 +19,5 @@ namespace Termina {
     private:
         RendererTexture* m_ColorTexture;
         RendererTexture* m_DepthTexture;
-
-        AssetHandle<TextureAsset> m_TextureHandle;
     };
 }

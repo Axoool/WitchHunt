@@ -33,13 +33,6 @@ void EditorCamera::Update(float dt, float viewportWidth, float viewportHeight)
         m_Pitch  = std::clamp(m_Pitch, -89.0f, 89.0f);
     }
 
-    float scroll = Termina::InputSystem::GetScrollDelta().y;
-    if (scroll != 0.0f)
-    {
-        m_FOV = std::clamp(m_FOV - scroll * 2.0f, 10.0f, 120.0f);
-        RecalculateProjection(m_LastViewportWidth, m_LastViewportHeight);
-    }
-
     glm::vec3 forward = GetForward();
     glm::vec3 right   = GetRight();
     glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f);

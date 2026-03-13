@@ -14,6 +14,7 @@
 #include "Termina/Asset/AssetSystem.hpp"
 #include "Termina/Audio/AudioSystem.hpp"
 #include "Termina/Input/InputSystem.hpp"
+#include "Termina/Platform/FileDialog.hpp"
 #include "Termina/Platform/LaunchProcess.hpp"
 #include "Termina/Scripting/ScriptSystem.hpp"
 #include "Termina/World/ComponentRegistry.hpp"
@@ -64,6 +65,52 @@ void EditorApplication::OnUpdate(float dt)
     }
 }
 
+bool EditorApplication::SaveWorld(bool forceDialog)
+{
+    auto* worldSystem = GetSystem<Termina::WorldSystem>();
+    auto* world = worldSystem->GetCurrentWorld();
+
+    std::string path = world->GetCurrentPath();
+    if (forceDialog || path.empty())
+    {
+        path = Termina::FileDialog::SaveFile();
+        if (path.empty())
+            return false;
+    }
+
+    return worldSystem->SaveWorld(path);
+}
+
+void EditorApplication::OpenWorld()
+{
+    std::string path = Termina::FileDialog::OpenFile();
+    if (path.empty())
+        return;
+
+    // Save the current world before discarding it.
+    SaveWorld();
+
+    auto* worldSystem = GetSystem<Termina::WorldSystem>();
+    if (worldSystem->LoadWorld(path))
+    {
+        // Both old world (now unloaded) and new world are settled;
+        // clean up assets that were only held by the old scene.
+        GetSystem<Termina::AssetSystem>()->Clean(1);
+    }
+}
+
+void EditorApplication::NewWorld()
+{
+    // Save the current world before replacing it.
+    SaveWorld();
+
+    auto* worldSystem = GetSystem<Termina::WorldSystem>();
+    worldSystem->NewWorld();
+
+    // Clean up assets that were only held by the old scene.
+    GetSystem<Termina::AssetSystem>()->Clean(1);
+}
+
 void EditorApplication::RenderDockspace()
 {
     const ImGuiViewport* viewport = ImGui::GetMainViewport();
@@ -94,6 +141,20 @@ void EditorApplication::RenderDockspace()
         {
             if (Termina::UIUtils::MenuItem("Quit"))
                 m_Running = false;
+            Termina::UIUtils::EndMenu();
+        }
+
+        if (Termina::UIUtils::BeginMenu("World"))
+        {
+            if (Termina::UIUtils::MenuItem("New", "Ctrl+N"))
+                NewWorld();
+            if (Termina::UIUtils::MenuItem("Open...", "Ctrl+O"))
+                OpenWorld();
+            ImGui::Separator();
+            if (Termina::UIUtils::MenuItem("Save", "Ctrl+S"))
+                SaveWorld();
+            if (Termina::UIUtils::MenuItem("Save As..."))
+                SaveWorld(true);
             Termina::UIUtils::EndMenu();
         }
 

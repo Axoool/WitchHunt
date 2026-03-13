@@ -30,10 +30,6 @@ namespace Termina {
         m_DepthTexture = device->CreateTexture(desc);
         m_DepthTexture->SetName("Cubes Depth Texture");
 
-        // Load texture
-        AssetSystem* assetSystem = Application::GetSystem<AssetSystem>();
-        m_TextureHandle = assetSystem->Load<TextureAsset>("Assets/Textures/TestTexture.png");
-
         // Create pipeline
         ShaderServer& server = Application::GetSystem<ShaderManager>()->GetShaderServer();
 
@@ -61,7 +57,6 @@ namespace Termina {
 
     void CubesPass::Execute(RenderPassExecuteInfo& info)
     {
-
         ShaderServer& server = Application::GetSystem<ShaderManager>()->GetShaderServer();
 
         TextureView* colorView = info.ViewCache->GetTextureView(TextureViewDesc().SetTexture(m_ColorTexture)
@@ -82,13 +77,8 @@ namespace Termina {
 
             struct Constants {
                 glm::mat4 MVP;
-
-                int TextureIndex;
-                int SamplerIndex;
             } constants = {
                 .MVP = info.CurrentCamera.ViewProjection * entity->GetComponent<Transform>().GetWorldMatrix(),
-                .TextureIndex = info.ViewCache->GetTextureView(TextureViewDesc().CreateDefault(m_TextureHandle->GetTexture(), TextureViewType::SHADER_READ, TextureViewDimension::TEXTURE_2D))->GetBindlessIndex(),
-                .SamplerIndex = info.SampCache->GetSampler(SamplerDesc())->GetBindlessHandle(),
             };
             re->SetConstants(sizeof(constants), &constants);
             re->Draw(36, 1, 0, 0);
