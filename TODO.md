@@ -26,7 +26,6 @@
 ## TODO
 
 ### Friday
-- 3D audio + audio components
 - UI utils to drag/drop entities and assets into the inspector
 - Rendering 3D models (static GLTF) + mesh component
 - Material asset
@@ -34,7 +33,6 @@
 - Physics system (implement different types of colliders)
 
 ### Saturday
-- Save/Load dialog for scenes
 - Asset compression and packing on export
 - Project system
 - Runtime renders to backbuffer
