@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Core/IInspectable.hpp"
-
+#include <Termina/Core/IInspectable.hpp>
 #include <Termina/RHI/Texture.hpp>
 
 namespace Termina {

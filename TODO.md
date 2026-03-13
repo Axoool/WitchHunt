@@ -27,13 +27,12 @@
 
 ### Friday
 - Rendering 3D models (static GLTF) + mesh component
-- Material asset
 - Simple HDR forward pass + tonemap via PassIO + debug renderer
 - Physics system (implement different types of colliders)
 
 ### Saturday
-- Asset compression and packing on export
 - Project system
+- Asset compression and packing on export
 - Runtime renders to backbuffer
 - Prefabs
 
