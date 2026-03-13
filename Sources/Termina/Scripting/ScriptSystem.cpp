@@ -6,6 +6,8 @@
 #include "World/WorldSystem.hpp"
 #include "Core/Logger.hpp"
 
+#include <ImGui/imgui.h>
+
 namespace Termina {
     ScriptSystem::ScriptSystem()
     {
@@ -71,5 +73,37 @@ namespace Termina {
                 return;
             }
         }
+    }
+
+    void ScriptSystem::ShowDebugWindow(bool* open)
+    {
+        if (!ImGui::Begin("Script System", open))
+        {
+            ImGui::End();
+            return;
+        }
+
+        ImGui::Text("Pending reload: %s", m_PendingReload ? "yes" : "no");
+        ImGui::Text("Watched files: %zu", m_Watches.size());
+        ImGui::Separator();
+
+        auto modules = ScriptModuleManager::Get().GetLoadedModules();
+        ImGui::Text("Loaded modules: %zu", modules.size());
+
+        for (auto& [name, path] : modules)
+        {
+            if (ImGui::CollapsingHeader(name.c_str()))
+            {
+                ImGui::TextUnformatted(path.c_str());
+                ImGui::Spacing();
+
+                auto components = ScriptModuleManager::Get().GetComponentNamesForModule(name);
+                ImGui::Text("Components (%zu):", components.size());
+                for (auto& comp : components)
+                    ImGui::BulletText("%s", comp.c_str());
+            }
+        }
+
+        ImGui::End();
     }
 }

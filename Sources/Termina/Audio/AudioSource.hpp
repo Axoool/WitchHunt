@@ -23,8 +23,8 @@ namespace Termina {
         void SetData(AudioData* data);
         /// Sets the audio source's looping state
         void SetLooping(bool looping) { m_Looping = looping; }
-        /// Seeks to a specific position in the audio source
-        void Seek(float positionSeconds);
+        /// Resets the audio source to the beginning
+        void Reset();
 
         /// Sets the audio source's position
         void SetPosition(const glm::vec3& position);

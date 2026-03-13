@@ -2,6 +2,7 @@
 #include "ShaderFile.hpp"
 
 #include <Termina/Core/Logger.hpp>
+#include <ImGui/imgui.h>
 #include <string>
 
 namespace Termina {
@@ -305,5 +306,78 @@ namespace Termina {
             variantKey += define;
         }
         return entry.ComputePipelines[variantKey];
+    }
+
+    void ShaderServer::ShowDebugWindow(bool* open)
+    {
+        if (!ImGui::Begin("Shader Server", open))
+        {
+            ImGui::End();
+            return;
+        }
+
+        ImGui::Text("Shaders: %zu  |  Pending deletion: %zu", m_Shaders.size(), m_PendingDeletion.size());
+        ImGui::Separator();
+
+        for (auto& [path, entry] : m_Shaders)
+        {
+            const char* typeLabel = entry.Type == PipelineType::Graphics ? "Graphics"
+                                  : entry.Type == PipelineType::Compute  ? "Compute"
+                                  :                                         "Mesh";
+
+            // Use path as header label
+            std::string label = path + "  [" + typeLabel + "]";
+            if (ImGui::CollapsingHeader(label.c_str()))
+            {
+                if (entry.Type == PipelineType::Graphics || entry.Type == PipelineType::Mesh)
+                {
+                    ImGui::Text("Variants (%zu):", entry.GraphicsPipelines.size());
+                    if (ImGui::BeginTable(path.c_str(), 3,
+                        ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp))
+                    {
+                        ImGui::TableSetupColumn("Variant",  ImGuiTableColumnFlags_WidthStretch);
+                        ImGui::TableSetupColumn("Type",     ImGuiTableColumnFlags_WidthFixed, 70.f);
+                        ImGui::TableSetupColumn("Size",     ImGuiTableColumnFlags_WidthFixed, 80.f);
+                        ImGui::TableHeadersRow();
+
+                        for (auto& [variant, pipeline] : entry.GraphicsPipelines)
+                        {
+                            ImGui::TableNextRow();
+                            ImGui::TableSetColumnIndex(0); ImGui::TextUnformatted(variant.c_str());
+                            ImGui::TableSetColumnIndex(1); ImGui::TextUnformatted("Graphics");
+                            ImGui::TableSetColumnIndex(2);
+                            if (pipeline) ImGui::Text("%llu B", static_cast<unsigned long long>(pipeline->GetSize()));
+                            else          ImGui::TextUnformatted("null");
+                        }
+                        ImGui::EndTable();
+                    }
+                }
+                else
+                {
+                    ImGui::Text("Variants (%zu):", entry.ComputePipelines.size());
+                    if (ImGui::BeginTable((path + "_c").c_str(), 3,
+                        ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp))
+                    {
+                        ImGui::TableSetupColumn("Variant",  ImGuiTableColumnFlags_WidthStretch);
+                        ImGui::TableSetupColumn("Type",     ImGuiTableColumnFlags_WidthFixed, 70.f);
+                        ImGui::TableSetupColumn("Size",     ImGuiTableColumnFlags_WidthFixed, 80.f);
+                        ImGui::TableHeadersRow();
+
+                        for (auto& [variant, pipeline] : entry.ComputePipelines)
+                        {
+                            ImGui::TableNextRow();
+                            ImGui::TableSetColumnIndex(0); ImGui::TextUnformatted(variant.c_str());
+                            ImGui::TableSetColumnIndex(1); ImGui::TextUnformatted("Compute");
+                            ImGui::TableSetColumnIndex(2);
+                            if (pipeline) ImGui::Text("%llu B", static_cast<unsigned long long>(pipeline->GetSize()));
+                            else          ImGui::TextUnformatted("null");
+                        }
+                        ImGui::EndTable();
+                    }
+                }
+            }
+        }
+
+        ImGui::End();
     }
 }

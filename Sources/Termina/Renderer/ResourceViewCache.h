@@ -20,6 +20,8 @@ namespace Termina {
         TextureView* GetTextureView(const TextureViewDesc& desc);
         BufferView* GetBufferView(const BufferViewDesc& desc);
 
+        size_t GetViewCount() const { return m_ResourceViews.size(); }
+
         void Clear();
     public:
         inline uint64 DeriveTextureKey(const TextureViewDesc& desc);

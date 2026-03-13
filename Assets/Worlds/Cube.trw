@@ -1,1 +1,0 @@
-{"actors":[{"active":true,"components":[{"active":true,"data":{"position":[0.0,0.0,0.0],"rotation":[1.0,0.0,0.0,0.0],"scale":[1.0,1.0,1.0]},"type":"Transform"}],"id":"6949361275294834777","name":"Entity","parentId":null}],"modules":[{"name":"Game","path":"libGameAssembly.dylib"}],"name":"World","version":1}

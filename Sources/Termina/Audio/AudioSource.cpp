@@ -50,10 +50,10 @@ namespace Termina {
         }
     }
 
-    void AudioSource::Seek(float positionSeconds)
+    void AudioSource::Reset()
     {
         if (m_Data != nullptr) {
-            ma_sound_seek_to_second(&m_Sound, positionSeconds);
+            ma_sound_seek_to_pcm_frame(&m_Sound, 0);
         }
     }
 

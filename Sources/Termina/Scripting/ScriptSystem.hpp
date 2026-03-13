@@ -20,6 +20,8 @@ namespace Termina {
         /// Checks for pending reloads and recompiles if necessary.
         void Update(float deltaTime) override;
 
+        void ShowDebugWindow(bool* open = nullptr);
+
         UpdateFlags GetUpdateFlags() const override { return UpdateFlags::UpdateDuringEditor; }
         std::string GetName() const override { return "Script System"; }
         int GetPriority() const override { return -1; }

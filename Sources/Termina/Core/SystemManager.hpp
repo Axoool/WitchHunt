@@ -47,6 +47,9 @@ namespace Termina {
 
         /// Sets whether the editor is active, affecting system update behavior.
         void SetIsInEditor(bool isInEditor);
+
+        /// Renders an ImGui window listing all registered systems sorted by priority.
+        void ShowDebugWindow(bool* open = nullptr);
     private:
         std::unordered_map<std::type_index, ISystem*> m_Subsystems;
         std::vector<ISystem*> m_UpdateList;

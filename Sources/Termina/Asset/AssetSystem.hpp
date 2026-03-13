@@ -74,6 +74,7 @@ namespace Termina {
             record.Asset    = asset;
             record.RefCount = 1;
             record.Path     = path;
+            record.TypeName = typeid(T).name();
             record.Deleter  = [](void* ptr) { delete static_cast<T*>(ptr); };
             m_Records[id]   = std::move(record);
             m_PathToID[path] = id;
@@ -119,6 +120,14 @@ namespace Termina {
         void ProcessPendingDeletions();
 
         // -----------------------------------------------------------------
+        // Debug
+        // -----------------------------------------------------------------
+
+        /// Renders an ImGui window listing all currently loaded assets grouped by
+        /// type, with their ID, ref count, and path.
+        void ShowDebugWindow(bool* open = nullptr);
+
+        // -----------------------------------------------------------------
         // Called by AssetHandle — not for direct use
         // -----------------------------------------------------------------
         void AddRef(uint32 id);
@@ -139,6 +148,7 @@ namespace Termina {
             void*                      Asset    = nullptr;
             int32                      RefCount = 0;
             std::string                Path;
+            std::string                TypeName;
             std::function<void(void*)> Deleter;
         };
 
@@ -190,6 +200,7 @@ namespace Termina {
         std::unique_ptr<class TextureLoader>  m_TextureLoader;
         std::unique_ptr<class AudioLoader>    m_AudioLoader;
         std::unique_ptr<class MaterialLoader> m_MaterialLoader;
+        std::unique_ptr<class ModelLoader>    m_ModelLoader;
     };
 
     // -------------------------------------------------------------------------

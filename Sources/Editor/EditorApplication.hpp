@@ -35,4 +35,14 @@ private:
     EditorContext m_Context;
     EditorCamera  m_Camera;
     std::vector<std::unique_ptr<Panel>> m_Panels;
+
+    struct DebugWindows
+    {
+        bool SystemManager = false;
+        bool Input         = false;
+        bool Renderer      = false;
+        bool Scripts       = false;
+        bool Shaders       = false;
+        bool Assets        = false;
+    } m_DebugWindows;
 };

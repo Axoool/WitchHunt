@@ -52,6 +52,8 @@ const char* ContentViewerPanel::GetFileIcon(const fs::path& path) const
         return "[WLD]";
     if (ext == ".mat")
         return "[MAT]";
+    if (ext == ".gltf" || ext == ".glb")
+        return "[MDL]";
     return "[FILE]";
 }
 

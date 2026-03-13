@@ -72,9 +72,7 @@ void EditorCamera::RecalculateProjection(float width, float height)
     // so the offscreen texture comes out correctly oriented without a UV flip.
     Projection            = glm::perspective(glm::radians(m_FOV), width / height, Near, Far);
     InverseProjection     = glm::inverse(Projection);
-    glm::mat4 renderProj  = Projection;
-    renderProj[1][1]      *= -1.0f;
-    ViewProjection        = renderProj * View;
+    ViewProjection        = Projection * View;
     InverseViewProjection = glm::inverse(ViewProjection);
 }
 

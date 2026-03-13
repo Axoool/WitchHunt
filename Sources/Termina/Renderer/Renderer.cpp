@@ -4,8 +4,10 @@
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_impl_glfw.h"
 #include "Renderer/Components/CameraComponent.hpp"
+#include "Renderer/Components/MeshComponent.hpp"
 #include "Renderer/Passes/CubesPass.hpp"
 #include "Renderer/Passes/ImGuiPass.hpp"
+#include "Renderer/Passes/MeshPass.hpp"
 #include "Renderer/Passes/TrianglePass.hpp"
 #include "Renderer/UIUtils.hpp"
 #include "World/Component.hpp"
@@ -132,18 +134,70 @@ namespace Termina {
     void RendererSystem::RegisterComponents()
     {
         ComponentRegistry::Get().Register<CameraComponent>("Camera Component");
+        ComponentRegistry::Get().Register<MeshComponent>("Mesh Component");
     }
 
     void RendererSystem::UnregisterComponents()
     {
         ComponentRegistry::Get().UnregisterByName("Camera Component");
+        ComponentRegistry::Get().UnregisterByName("Mesh Component");
     }
 
     void RendererSystem::BakeTimeline()
     {
         m_RenderPasses = {
-            new CubesPass(),
+            new MeshPass(),
             new ImGuiPass()
         };
+    }
+
+    void RendererSystem::ShowDebugWindow(bool* open)
+    {
+        if (!ImGui::Begin("Renderer", open))
+        {
+            ImGui::End();
+            return;
+        }
+
+        // PassIO
+        if (ImGui::CollapsingHeader("PassIO"))
+        {
+            auto texNames = m_PassIO.GetTextureNames();
+            auto bufNames = m_PassIO.GetBufferNames();
+
+            ImGui::Text("Textures: %zu", texNames.size());
+            for (auto& name : texNames)
+            {
+                ImGui::BulletText("%s", name.c_str());
+            }
+
+            ImGui::Text("Buffers: %zu", bufNames.size());
+            for (auto& name : bufNames)
+            {
+                ImGui::BulletText("%s", name.c_str());
+            }
+        }
+
+        // Resource view cache
+        if (ImGui::CollapsingHeader("Resource View Cache"))
+        {
+            ImGui::Text("Cached views: %zu", m_ResourceViewCache ? m_ResourceViewCache->GetViewCount() : 0);
+        }
+
+        // Sampler cache
+        if (ImGui::CollapsingHeader("Sampler Cache"))
+        {
+            ImGui::Text("Cached samplers: %zu", m_SamplerCache ? m_SamplerCache->GetSamplerCount() : 0);
+        }
+
+        // Render passes
+        if (ImGui::CollapsingHeader("Render Passes"))
+        {
+            ImGui::Text("Passes: %zu", m_RenderPasses.size());
+            for (size_t i = 0; i < m_RenderPasses.size(); ++i)
+                ImGui::BulletText("[%zu] %p", i, static_cast<void*>(m_RenderPasses[i]));
+        }
+
+        ImGui::End();
     }
 }

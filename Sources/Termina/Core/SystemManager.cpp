@@ -1,5 +1,6 @@
 #include "SystemManager.hpp"
 
+#include <ImGui/imgui.h>
 #include <algorithm>
 
 namespace Termina {
@@ -104,5 +105,49 @@ namespace Termina {
     void SystemManager::SetIsInEditor(bool isInEditor)
     {
         m_IsInEditor = isInEditor;
+    }
+
+    void SystemManager::ShowDebugWindow(bool* open)
+    {
+        if (!ImGui::Begin("System Manager", open))
+        {
+            ImGui::End();
+            return;
+        }
+
+        ImGui::Text("Systems: %zu", m_UpdateList.size());
+        ImGui::Separator();
+
+        if (ImGui::BeginTable("systems", 3,
+            ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp))
+        {
+            ImGui::TableSetupColumn("Priority", ImGuiTableColumnFlags_WidthFixed, 60.f);
+            ImGui::TableSetupColumn("Name",     ImGuiTableColumnFlags_WidthStretch);
+            ImGui::TableSetupColumn("Flags",    ImGuiTableColumnFlags_WidthFixed, 160.f);
+            ImGui::TableHeadersRow();
+
+            for (ISystem* system : m_UpdateList)
+            {
+                ImGui::TableNextRow();
+
+                ImGui::TableSetColumnIndex(0);
+                ImGui::Text("%d", system->GetPriority());
+
+                ImGui::TableSetColumnIndex(1);
+                ImGui::TextUnformatted(system->GetName().c_str());
+
+                ImGui::TableSetColumnIndex(2);
+                UpdateFlags flags = system->GetUpdateFlags();
+                char buf[64] = "";
+                if (Any(flags, UpdateFlags::UpdateDuringEditor))         strcat(buf, "Update ");
+                if (Any(flags, UpdateFlags::PhysicsUpdateDuringEditor))  strcat(buf, "Physics ");
+                if (Any(flags, UpdateFlags::RenderUpdateDuringEditor))   strcat(buf, "Render");
+                ImGui::TextUnformatted(buf[0] ? buf : "-");
+            }
+
+            ImGui::EndTable();
+        }
+
+        ImGui::End();
     }
 }

@@ -20,6 +20,8 @@ namespace Termina
 
         Sampler* GetSampler(const SamplerDesc& desc);
 
+        size_t GetSamplerCount() const { return m_Samplers.size(); }
+
         void Clear();
     public:
         inline uint64 DeriveSamplerKey(const SamplerDesc& desc);

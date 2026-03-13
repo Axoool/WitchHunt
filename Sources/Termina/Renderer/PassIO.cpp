@@ -33,6 +33,24 @@ namespace Termina {
         return m_Buffers.count(name) > 0;
     }
 
+    std::vector<std::string> PassIO::GetTextureNames() const
+    {
+        std::vector<std::string> names;
+        names.reserve(m_Textures.size());
+        for (auto& [name, _] : m_Textures)
+            names.push_back(name);
+        return names;
+    }
+
+    std::vector<std::string> PassIO::GetBufferNames() const
+    {
+        std::vector<std::string> names;
+        names.reserve(m_Buffers.size());
+        for (auto& [name, _] : m_Buffers)
+            names.push_back(name);
+        return names;
+    }
+
     void PassIO::Clear()
     {
         m_Textures.clear();

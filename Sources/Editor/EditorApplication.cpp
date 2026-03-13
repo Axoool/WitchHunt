@@ -13,6 +13,7 @@
 #include "ImGui/imgui.h"
 #include "Termina/Asset/AssetSystem.hpp"
 #include "Termina/Audio/AudioSystem.hpp"
+#include "Termina/Core/SystemManager.hpp"
 #include "Termina/Input/InputSystem.hpp"
 #include "Termina/Platform/FileDialog.hpp"
 #include "Termina/Platform/LaunchProcess.hpp"
@@ -38,9 +39,6 @@ EditorApplication::EditorApplication()
     RegisterPanel<ContentViewerPanel>();
 
     Termina::ComponentRegistry::Get().Report();
-
-    Termina::World* world = GetSystem<Termina::WorldSystem>()->GetCurrentWorld();
-    world->LoadFromFile("Assets/Worlds/Cubes.trw");
 }
 
 EditorApplication::~EditorApplication()
@@ -63,6 +61,13 @@ void EditorApplication::OnUpdate(float dt)
         if (panel->IsOpen())
             panel->OnImGuiRender();
     }
+
+    if (m_DebugWindows.SystemManager) m_SystemManager.ShowDebugWindow(&m_DebugWindows.SystemManager);
+    if (m_DebugWindows.Input)         Termina::InputSystem::ShowDebugWindow(&m_DebugWindows.Input);
+    if (m_DebugWindows.Renderer)      GetSystem<Termina::RendererSystem>()->ShowDebugWindow(&m_DebugWindows.Renderer);
+    if (m_DebugWindows.Scripts)       GetSystem<Termina::ScriptSystem>()->ShowDebugWindow(&m_DebugWindows.Scripts);
+    if (m_DebugWindows.Shaders)       GetSystem<Termina::ShaderManager>()->ShowDebugWindow(&m_DebugWindows.Shaders);
+    if (m_DebugWindows.Assets)        GetSystem<Termina::AssetSystem>()->ShowDebugWindow(&m_DebugWindows.Assets);
 }
 
 bool EditorApplication::SaveWorld(bool forceDialog)
@@ -95,7 +100,7 @@ void EditorApplication::OpenWorld()
     {
         // Both old world (now unloaded) and new world are settled;
         // clean up assets that were only held by the old scene.
-        GetSystem<Termina::AssetSystem>()->Clean(1);
+        GetSystem<Termina::AssetSystem>()->Clean(0);
     }
 }
 
@@ -175,6 +180,17 @@ void EditorApplication::RenderDockspace()
                 GetSystem<Termina::ScriptSystem>()->Compile();
             if (Termina::UIUtils::MenuItem("Recompile", "Ctrl+F5"))
                 GetSystem<Termina::ScriptSystem>()->Recompile();
+            Termina::UIUtils::EndMenu();
+        }
+
+        if (Termina::UIUtils::BeginMenu("Debug"))
+        {
+            if (Termina::UIUtils::MenuItem("System Manager", nullptr, m_DebugWindows.SystemManager)) m_DebugWindows.SystemManager = !m_DebugWindows.SystemManager;
+            if (Termina::UIUtils::MenuItem("Input",          nullptr, m_DebugWindows.Input))         m_DebugWindows.Input         = !m_DebugWindows.Input;
+            if (Termina::UIUtils::MenuItem("Renderer",       nullptr, m_DebugWindows.Renderer))      m_DebugWindows.Renderer      = !m_DebugWindows.Renderer;
+            if (Termina::UIUtils::MenuItem("Scripts",        nullptr, m_DebugWindows.Scripts))       m_DebugWindows.Scripts       = !m_DebugWindows.Scripts;
+            if (Termina::UIUtils::MenuItem("Shaders",        nullptr, m_DebugWindows.Shaders))       m_DebugWindows.Shaders       = !m_DebugWindows.Shaders;
+            if (Termina::UIUtils::MenuItem("Assets",         nullptr, m_DebugWindows.Assets))        m_DebugWindows.Assets        = !m_DebugWindows.Assets;
             Termina::UIUtils::EndMenu();
         }
 

@@ -27,6 +27,8 @@ namespace Termina {
 
         void ReloadModifiedPipelines();
         void ProcessPendingDeletions();
+
+        void ShowDebugWindow(bool* open = nullptr);
     private:
         struct ShaderEntry
         {

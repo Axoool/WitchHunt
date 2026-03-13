@@ -26,7 +26,6 @@
 ## TODO
 
 ### Friday
-- Rendering 3D models (static GLTF) + mesh component
 - Simple HDR forward pass + tonemap via PassIO + debug renderer
 - Physics system (implement different types of colliders)
 
@@ -35,6 +34,7 @@
 - Asset compression and packing on export
 - Runtime renders to backbuffer
 - Prefabs
+- First release of the engine to a standalone executable
 
 ## Sunday
 - Bindless scene buffer setup

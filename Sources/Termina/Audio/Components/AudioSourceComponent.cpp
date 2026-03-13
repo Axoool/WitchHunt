@@ -36,7 +36,7 @@ namespace Termina {
         if (!m_AudioAsset) return;
 
         m_Source->Stop();
-        m_Source->Seek(0);
+        m_Source->Reset();
     }
 
     void AudioSourceComponent::OnUpdate(float deltaTime)

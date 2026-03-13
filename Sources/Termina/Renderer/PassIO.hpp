@@ -5,6 +5,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 namespace Termina {
     /// Represents the input/output resources for a render pass, shared across multiple passes.
@@ -19,6 +20,9 @@ namespace Termina {
 
         bool HasTexture(const std::string& name) const;
         bool HasBuffer(const std::string& name) const;
+
+        std::vector<std::string> GetTextureNames() const;
+        std::vector<std::string> GetBufferNames() const;
 
         void Clear();
 

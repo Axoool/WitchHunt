@@ -22,6 +22,8 @@ namespace Termina {
 
         ShaderServer& GetShaderServer() { return m_ShaderServer; }
         DLL& GetLibrary() { return m_Library; }
+
+        void ShowDebugWindow(bool* open = nullptr) { m_ShaderServer.ShowDebugWindow(open); }
     private:
         DLL m_Library;
         ShaderServer m_ShaderServer;

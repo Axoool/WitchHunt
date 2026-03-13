@@ -49,6 +49,8 @@ namespace Termina {
         ResourceViewCache* GetResourceViewCache() const { return m_ResourceViewCache; }
         SamplerCache* GetSamplerCache() const { return m_SamplerCache; }
         PassIO* GetPassIO() { return &m_PassIO; }
+
+        void ShowDebugWindow(bool* open = nullptr);
     private:
         /// Bakes the render timeline by creating render passes.
         void BakeTimeline();
