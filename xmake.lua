@@ -25,7 +25,7 @@ elseif is_plat("macosx") then
 end
 
 -- Other defines
-add_defines("GLM_FORCE_DEPTH_ZERO_TO_ONE", "VK_NO_PROTOTYPES", "GLM_ENABLE_EXPERIMENTAL", { public = true })
+add_defines("GLM_FORCE_DEPTH_ZERO_TO_ONE", "VK_NO_PROTOTYPES", "GLM_ENABLE_EXPERIMENTAL", "JPH_DEBUG_RENDERER", { public = true })
 
 
 includes("Sources")

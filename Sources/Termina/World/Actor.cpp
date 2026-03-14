@@ -54,6 +54,14 @@ namespace Termina {
 
     void Actor::OnPreUpdate(float deltaTime)
     {
+        if (!m_PendingPlayComponents.empty()) {
+            std::vector<Component*> pending = std::move(m_PendingPlayComponents);
+            m_PendingPlayComponents.clear();
+            for (Component* comp : pending) {
+                comp->OnPlay();
+            }
+        }
+
         for (Component* component : m_Components)
             if (component->IsActive() && (m_InPlayMode || Any(component->GetUpdateFlags(), UpdateFlags::UpdateDuringEditor)))
                 component->OnPreUpdate(deltaTime);
@@ -169,6 +177,8 @@ namespace Termina {
         m_Components.push_back(comp);
         if (m_Initialized)
             comp->OnInit();
+        if (m_InPlayMode)
+            m_PendingPlayComponents.push_back(comp);
     }
 
     void Actor::RemoveComponentRaw(Component* comp)
@@ -179,6 +189,10 @@ namespace Termina {
         if (mapIt == m_ComponentMap.end() || mapIt->second != comp) return;
         m_Components.erase(std::find(m_Components.begin(), m_Components.end(), comp));
         m_ComponentMap.erase(mapIt);
+        auto pendingIt = std::find(m_PendingPlayComponents.begin(), m_PendingPlayComponents.end(), comp);
+        if (pendingIt != m_PendingPlayComponents.end()) {
+            m_PendingPlayComponents.erase(pendingIt);
+        }
         delete comp;
     }
 

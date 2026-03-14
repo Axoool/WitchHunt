@@ -387,6 +387,12 @@ ModelAsset* ModelLoader::LoadFromDisk(const std::string& path)
     // Flush synchronously so the buffers are ready before the next frame.
     uploader->Flush();
 
+    // Store CPU-side positions and indices for physics mesh colliders.
+    modelAsset->CpuPositions.reserve(allVertices.size());
+    for (auto& v : allVertices)
+        modelAsset->CpuPositions.push_back(v.Position);
+    modelAsset->CpuIndices = allIndices;
+
     // -----------------------------------------------------------------------
     // 4. Create bindless vertex buffer view
     // -----------------------------------------------------------------------

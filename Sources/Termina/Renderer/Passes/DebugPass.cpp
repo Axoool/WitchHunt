@@ -34,6 +34,7 @@ namespace Termina {
         RenderPipelineDesc pipelineDesc = RenderPipelineDesc()
             .SetName("Debug Pipeline")
             .SetCullMode(PipelineCullMode::NONE)
+            .SetTopology(PipelineTopology::LINES)
             .SetEnableBlending(true)
             .SetDepthReadEnabled(true)
             .SetDepthWriteEnabled(false)

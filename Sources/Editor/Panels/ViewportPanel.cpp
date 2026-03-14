@@ -9,6 +9,8 @@
 #include "Termina/World/Components/Transform.hpp"
 #include "Termina/World/Actor.hpp"
 #include "Termina/World/WorldSystem.hpp"
+#include "Termina/Renderer/Components/CameraComponent.hpp"
+#include "Termina/Renderer/Passes/DebugPass.hpp"
 
 #include <GLM/gtc/type_ptr.hpp>
 #include <GLM/gtx/matrix_decompose.hpp>
@@ -115,6 +117,12 @@ void ViewportPanel::OnImGuiRender()
                     transform.SetLocalRotation(rotation);
                     transform.SetLocalScale(scale);
                 }
+            }
+            // Draw camera frustum when a camera entity is selected in editor mode.
+            if (actor->HasComponent<Termina::CameraComponent>()) {
+                auto& cam = actor->GetComponent<Termina::CameraComponent>();
+                glm::mat4 vp = cam.GetCamera().Projection * cam.GetCamera().View;
+                Termina::DebugPass::DrawFrustum(vp, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
             }
         } else {
             // Non-actor inspectable items can implement their own gizmo handling.

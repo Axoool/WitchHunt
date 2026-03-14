@@ -1,4 +1,5 @@
 #include "World.hpp"
+#include "WorldSystem.hpp"
 #include "ComponentRegistry.hpp"
 #include "Renderer/Components/CameraComponent.hpp"
 #include "Renderer/Renderer.hpp"
@@ -24,6 +25,11 @@ namespace Termina {
         m_Actors.push_back(std::move(actor));
         ptr->AddComponent<Transform>();
         ptr->OnInit();
+        if (auto* ws = Application::GetSystem<WorldSystem>()) {
+            if (ws->IsPlaying()) {
+                ptr->OnPlay();
+            }
+        }
         return ptr;
     }
 

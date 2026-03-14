@@ -32,6 +32,8 @@ namespace Termina {
             ptr->SetOwner(this);
             m_ComponentMap[typeid(T)] = ptr;
             m_Components.push_back(std::move(ptr));
+            if (m_Initialized) ptr->OnInit();
+            if (m_InPlayMode) m_PendingPlayComponents.push_back(ptr);
             return *ptr;
         }
 
@@ -124,5 +126,7 @@ namespace Termina {
 
         bool m_InPlayMode = false;
         bool m_Initialized = false;
+
+        std::vector<Component*> m_PendingPlayComponents;
     };
 }

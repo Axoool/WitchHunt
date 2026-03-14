@@ -5,6 +5,7 @@ target("Jolt")
     add_files("**.cpp")
     add_headerfiles("**.hpp")
     set_group("Third Party")
+    add_defines("JPH_DEBUG_RENDERER", {public = true})
 
     if is_mode("debug") then
         set_symbols("debug")

@@ -1,5 +1,6 @@
 #include "Application.hpp"
 #include "World/WorldSystem.hpp"
+#include "Physics/PhysicsSystem.hpp"
 
 namespace Termina {
     Application* Application::s_Instance = nullptr;
@@ -27,11 +28,19 @@ namespace Termina {
 
     void Application::Run()
     {
+        float physicsAccumulator = 0.0f;
+
         while (m_Running && m_Window->IsOpen()) {
             FRAME_LOOP {
                 float currentTime = static_cast<float>(glfwGetTime());
                 float dt = currentTime - m_LastFrameTime;
                 m_LastFrameTime = currentTime;
+
+                // Clamp dt to avoid spiral of death on long hitches
+                if (dt > 0.25f)
+                    dt = 0.25f;
+
+                physicsAccumulator += dt;
 
                 m_SystemManager.Begin();
 
@@ -39,9 +48,12 @@ namespace Termina {
                 Update(dt);
                 PostUpdate(dt);
 
-                PrePhysics(dt);
-                Physics(dt);
-                PostPhysics(dt);
+                while (physicsAccumulator >= PhysicsUpdateRate) {
+                    PrePhysics(PhysicsUpdateRate);
+                    Physics(PhysicsUpdateRate);
+                    PostPhysics(PhysicsUpdateRate);
+                    physicsAccumulator -= PhysicsUpdateRate;
+                }
 
                 PreRender(dt);
                 Render(dt);

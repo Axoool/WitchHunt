@@ -1,12 +1,13 @@
 #pragma once
 
 #include <Termina/World/World.hpp>
+#include <Termina/Physics/IPhysicsCallbacks.hpp>
 #include "Prefab.hpp"
 #include "Scene.hpp"
 
 namespace TerminaScript {
     /// Represents a scriptable component that can be attached to an actor.
-    class ScriptableComponent : public Termina::Component
+    class ScriptableComponent : public Termina::Component, public Termina::IPhysicsCallbacks
     {
     public:
         ScriptableComponent() = default;
@@ -35,7 +36,12 @@ namespace TerminaScript {
         virtual void Serialize(nlohmann::json& out) const override {}
         virtual void Deserialize(const nlohmann::json& in) override {}
 
-        // TODO: TriggerEnter, TriggerStay, TriggerExit, CollisionEnter, CollisionStay, CollisionExit
+        virtual void OnCollisionEnter(Termina::Actor* other) override {}
+        virtual void OnCollisionStay(Termina::Actor* other)  override {}
+        virtual void OnCollisionExit(Termina::Actor* other)  override {}
+        virtual void OnTriggerEnter(Termina::Actor* other)   override {}
+        virtual void OnTriggerStay(Termina::Actor* other)    override {}
+        virtual void OnTriggerExit(Termina::Actor* other)    override {}
 
         Termina::UpdateFlags GetUpdateFlags() const override { return (Termina::UpdateFlags)0; }
 
@@ -53,6 +59,8 @@ namespace TerminaScript {
     protected:
         friend class ScriptManager;
 
+        /// Instantiates an empty actor.
+        Termina::Actor* Instantiate() { return m_Owner->GetParentWorld()->SpawnActor(); }
         /// Instantiates a new actor by cloning an existing one.
         Termina::Actor* Instantiate(Termina::Actor* actor);
         /// Instantiates a new actor from a prefab asset.

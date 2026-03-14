@@ -27,7 +27,6 @@
 
 ### Saturday
 - Physics system (implement different types of colliders)
-- Asset compression and packing on export
 
 ## Sunday
 - Cook torrance BRDF
@@ -46,3 +45,4 @@
 - DOF
 - Batched 2D sprite renderer
 - Text renderer
+- Asset compression and packing on export

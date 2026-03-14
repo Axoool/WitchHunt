@@ -72,6 +72,10 @@ namespace Termina {
         RendererBuffer* VertexBuffer = nullptr; // BufferUsage::VERTEX | SHADER_READ
         RendererBuffer* IndexBuffer  = nullptr; // BufferUsage::INDEX
         BufferView*     VertexView   = nullptr; // bindless SRV index for shader access
+
+        // CPU-side positions and indices retained for physics (MeshCollider).
+        std::vector<glm::vec3> CpuPositions;
+        std::vector<uint32>    CpuIndices;
     };
 
 } // namespace Termina
