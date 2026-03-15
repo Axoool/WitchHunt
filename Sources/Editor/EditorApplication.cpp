@@ -62,8 +62,8 @@ EditorApplication::~EditorApplication()
 void EditorApplication::OnUpdate(float dt)
 {
     auto* renderer = GetSystem<Termina::RendererSystem>();
-    float w = static_cast<float>(m_Window->GetWidth());
-    float h = static_cast<float>(m_Window->GetHeight());
+    float w = m_Context.ViewportWidth > 0.0f ? m_Context.ViewportWidth : static_cast<float>(m_Window->GetWidth());
+    float h = m_Context.ViewportHeight > 0.0f ? m_Context.ViewportHeight : static_cast<float>(m_Window->GetHeight());
     if (!ImGui::GetIO().WantCaptureKeyboard && !GetSystem<Termina::WorldSystem>()->IsPlaying())
         m_Camera.Update(dt, w, h);
     if (!GetSystem<Termina::WorldSystem>()->IsPlaying())

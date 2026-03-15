@@ -137,30 +137,39 @@ static const cgltf_accessor* FindAttribute(const cgltf_primitive& prim, cgltf_at
     return nullptr;
 }
 
-/// Write a default .mat sidecar file. If the GLTF material has a base colour texture
-/// URI, embed its relative path (resolved from the GLTF directory).
+/// Write a default .mat sidecar file. If the GLTF material has textures
+/// embed their relative paths (resolved from the GLTF directory).
 static void WriteSidecarMat(const std::string& matPath,
                              const cgltf_material* cgMat,
                              const std::string& gltfDir)
 {
-    std::string albedoPath;
-    if (cgMat &&
-        cgMat->has_pbr_metallic_roughness &&
-        cgMat->pbr_metallic_roughness.base_color_texture.texture)
+    std::string albedoPath, normalPath, ormPath, emissivePath;
+
+    if (cgMat)
     {
-        const cgltf_image* img = cgMat->pbr_metallic_roughness.base_color_texture.texture->image;
-        if (img && img->uri)
+        auto getTexturePath = [&](const cgltf_texture_view& view) -> std::string {
+            if (view.texture && view.texture->image && view.texture->image->uri)
+            {
+                return (fs::path(gltfDir) / view.texture->image->uri).lexically_normal().string();
+            }
+            return "";
+        };
+
+        if (cgMat->has_pbr_metallic_roughness)
         {
-            fs::path resolved = fs::path(gltfDir) / img->uri;
-            albedoPath = resolved.lexically_normal().string();
+            albedoPath = getTexturePath(cgMat->pbr_metallic_roughness.base_color_texture);
+            ormPath    = getTexturePath(cgMat->pbr_metallic_roughness.metallic_roughness_texture);
         }
+
+        normalPath   = getTexturePath(cgMat->normal_texture);
+        emissivePath = getTexturePath(cgMat->emissive_texture);
     }
 
     nlohmann::json j;
     j["albedo_texture"]    = albedoPath;
-    j["normal_texture"]    = "";
-    j["orm_texture"]       = "";
-    j["emissive_texture"]  = "";
+    j["normal_texture"]    = normalPath;
+    j["orm_texture"]       = ormPath;
+    j["emissive_texture"]  = emissivePath;
     j["alpha_test"]        = false;
     j["color"]             = { 1.0f, 1.0f, 1.0f };
     j["override_metallic"] = false;

@@ -11,6 +11,9 @@
 #include "ResourceViewCache.h"
 #include "SamplerCache.h"
 #include "PassIO.hpp"
+#include "GPULight.hpp"
+
+#include <vector>
 
 namespace Termina {
     /// Contains the information needed to execute a render pass.
@@ -28,6 +31,7 @@ namespace Termina {
 
         World* CurrentWorld;
         Camera CurrentCamera;
+        const std::vector<GPULight>* LightList = nullptr;
 
         uint32 FrameIndex;
         int32 Width;

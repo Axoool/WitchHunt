@@ -1,10 +1,6 @@
 ## TODO
 
 ## Sunday
-- Cook torrance BRDF, directional lights
-- Point lights
-- Spot lights
-- Bindless scene setup for light lists
 - CPU frustum culling
 - Vulkan/Metal RT
 - Raytraced shadows

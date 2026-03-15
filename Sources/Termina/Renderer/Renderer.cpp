@@ -5,6 +5,9 @@
 #include "ImGui/imgui_impl_glfw.h"
 #include "Renderer/Components/CameraComponent.hpp"
 #include "Renderer/Components/MeshComponent.hpp"
+#include "Renderer/Components/DirectionalLightComponent.hpp"
+#include "Renderer/Components/PointLightComponent.hpp"
+#include "Renderer/Components/SpotLightComponent.hpp"
 #include "Renderer/Passes/CubesPass.hpp"
 #include "Renderer/Passes/GBufferPass.hpp"
 #include "Renderer/Passes/DeferredPass.hpp"
@@ -81,6 +84,7 @@ namespace Termina {
             BakeTimeline();
             m_BakedTimeline = true;
         }
+        m_PendingLights.clear();
     }
 
     void RendererSystem::Render(float deltaTime)
@@ -120,6 +124,7 @@ namespace Termina {
 
                 .CurrentWorld = Application::GetSystem<WorldSystem>()->GetCurrentWorld(),
                 .CurrentCamera = m_CurrentCamera,
+                .LightList = &m_PendingLights,
 
                 .FrameIndex = frameIndex,
                 .Width = pixelWidth,
@@ -137,12 +142,18 @@ namespace Termina {
     {
         ComponentRegistry::Get().Register<CameraComponent>("Camera Component");
         ComponentRegistry::Get().Register<MeshComponent>("Mesh Component");
+        ComponentRegistry::Get().Register<DirectionalLightComponent>("Directional Light");
+        ComponentRegistry::Get().Register<PointLightComponent>("Point Light");
+        ComponentRegistry::Get().Register<SpotLightComponent>("Spot Light");
     }
 
     void RendererSystem::UnregisterComponents()
     {
         ComponentRegistry::Get().UnregisterByName("Camera Component");
         ComponentRegistry::Get().UnregisterByName("Mesh Component");
+        ComponentRegistry::Get().UnregisterByName("Directional Light");
+        ComponentRegistry::Get().UnregisterByName("Point Light");
+        ComponentRegistry::Get().UnregisterByName("Spot Light");
     }
 
     void RendererSystem::BakeTimeline()

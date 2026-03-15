@@ -12,6 +12,9 @@
 #include "SamplerCache.h"
 #include "PassIO.hpp"
 #include "Camera.hpp"
+#include "GPULight.hpp"
+
+#include <vector>
 
 namespace Termina {
     /// A callback function for rendering.
@@ -31,6 +34,9 @@ namespace Termina {
         void RegisterRenderCallback(const RenderCallback& callback) { m_RenderCallbacks.push_back(callback); }
         void SetCurrentCamera(const Camera& camera) { m_CurrentCamera = camera; }
         const Camera& GetCurrentCamera() const { return m_CurrentCamera; }
+
+        /// Submit a light for this frame. Called by light components during OnRender.
+        void SubmitLight(const GPULight& light) { m_PendingLights.push_back(light); }
 
         void RegisterComponents() override;
         void UnregisterComponents() override;
@@ -73,6 +79,9 @@ namespace Termina {
 
         std::vector<RenderCallback> m_RenderCallbacks;
         std::vector<RenderPass*> m_RenderPasses;
+
+        /// Light list accumulated each frame by light components, cleared in PreRender.
+        std::vector<GPULight> m_PendingLights;
 
         GPUBumpAllocator* m_GPUAllocator = nullptr;
         TemporaryContext* m_TemporaryContext = nullptr;

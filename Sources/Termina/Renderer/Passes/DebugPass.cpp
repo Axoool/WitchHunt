@@ -40,7 +40,7 @@ namespace Termina {
             .SetDepthWriteEnabled(false)
             .SetDepthCompareOp(PipelineCompareOp::LESS)
             .SetDepthAttachmentFormat(TextureFormat::D32_FLOAT)
-            .AddColorAttachmentFormat(TextureFormat::BGRA8_UNORM);
+            .AddColorAttachmentFormat(TextureFormat::RGBA8_UNORM);
 
         server.WatchPipeline("__TERMINA__/CORE_SHADERS/Debug.hlsl", pipelineDesc, PipelineType::Graphics);
 

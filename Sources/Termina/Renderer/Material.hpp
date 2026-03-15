@@ -26,20 +26,16 @@ namespace Termina {
         void Inspect() override;
     };
 
-    /// GPU-side material representation.
+    /// GPU-side material entry stored in the global bindless material buffer (32 bytes).
+    /// Matches the HLSL GPUMaterial struct in Common/Scene.hlsli.
     struct GPUMaterial
     {
-        uint AlbedoTexture;
-        uint NormalTexture;
-        uint ORMTexture;
-        uint EmissiveTexture;
-
-        bool AlphaTest;
-        bool OverrideMetallic;
-        bool OverrideRoughness;
-        float MetallicFactor;
-
-        float RoughnessFactor;
-        glm::vec3 Color;
+        int AlbedoIndex;    // Bindless SRV index (-1 = white)
+        int NormalIndex;    // Bindless SRV index (-1 = vertex normal)
+        int ORMIndex;       // Bindless SRV index (-1 = defaults)
+        int EmissiveIndex;  // Bindless SRV index (-1 = black)
+        int SamplerIndex;   // Bindless sampler index
+        int _pad[3];
     };
+    static_assert(sizeof(GPUMaterial) == 32, "GPUMaterial must be 32 bytes");
 }

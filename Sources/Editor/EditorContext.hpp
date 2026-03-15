@@ -10,4 +10,6 @@ struct EditorContext
     Termina::IInspectable* ItemToInspect = nullptr;
     ContentViewerPanel* ContentViewer = nullptr;
     Termina::Project CurrentProject;
+    float ViewportWidth = 0.0f;
+    float ViewportHeight = 0.0f;
 };

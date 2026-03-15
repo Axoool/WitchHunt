@@ -73,6 +73,8 @@ void ViewportPanel::OnImGuiRender()
         );
         imagePos = ImGui::GetCursorScreenPos();
         imageSize = ImGui::GetContentRegionAvail();
+        m_Context.ViewportWidth = imageSize.x;
+        m_Context.ViewportHeight = imageSize.y;
         ImGui::Image((ImTextureID)colorView->GetBindlessIndex(), imageSize, {0, 0}, {1, 1});
     }
 

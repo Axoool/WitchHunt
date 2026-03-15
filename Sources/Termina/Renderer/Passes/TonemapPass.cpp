@@ -17,7 +17,7 @@ namespace Termina {
         m_LDRTexture = device->CreateTexture(TextureDesc()
             .SetSize(width, height)
             .SetFormat(TextureFormat::RGBA8_UNORM)
-            .SetUsage(TextureUsage::SHADER_READ | TextureUsage::SHADER_WRITE));
+            .SetUsage(TextureUsage::SHADER_READ | TextureUsage::SHADER_WRITE | TextureUsage::RENDER_TARGET));
         m_LDRTexture->SetName("LDR Output");
 
         ShaderServer& server = Application::GetSystem<ShaderManager>()->GetShaderServer();
