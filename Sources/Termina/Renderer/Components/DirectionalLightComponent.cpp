@@ -24,6 +24,7 @@ namespace Termina {
         light.Type      = static_cast<int32>(LightType::Directional);
         light.Color     = Color * Intensity;
         light.Direction = glm::normalize(t.GetForward());
+        light.Direction.y = -light.Direction.y;
         light.Position  = glm::vec3(0.0f);
         light.Range     = 0.0f;
         light.InnerCos  = 0.0f;

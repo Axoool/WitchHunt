@@ -220,7 +220,18 @@ ModelAsset* ModelLoader::LoadFromDisk(const std::string& path)
     for (cgltf_size mi = 0; mi < data->materials_count; ++mi)
     {
         std::string matPath = (fs::path(gltfDir) / (baseName + "_mat" + std::to_string(mi) + ".mat")).string();
-        if (!fs::exists(matPath))
+        bool needsWrite = !fs::exists(matPath);
+        if (!needsWrite)
+        {
+            try {
+                std::ifstream chk(matPath);
+                nlohmann::json chkJson;
+                chk >> chkJson;
+                if (!chkJson.contains("orm_texture"))
+                    needsWrite = true;
+            } catch (...) { needsWrite = true; }
+        }
+        if (needsWrite)
             WriteSidecarMat(matPath, &data->materials[mi], gltfDir);
         modelAsset->Materials.push_back(asset->Load<MaterialAsset>(matPath));
     }

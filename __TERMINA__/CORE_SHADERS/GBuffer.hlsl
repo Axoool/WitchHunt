@@ -70,18 +70,17 @@ GBufferOut FSMain(VSOut i)
 
     // --- Albedo ---
     float4 albedo = float4(1.0f, 1.0f, 1.0f, 1.0f);
-    if (mat.AlbedoIndex >= 0)
-    {
+    if (mat.AlbedoIndex >= 0) {
         Texture2D<float4> tex = ResourceDescriptorHeap[mat.AlbedoIndex];
         albedo = tex.Sample(samp, i.UV);
         if (albedo.a < 0.25f)
             discard;
+        albedo.rgb = pow(albedo.rgb, float3(2.2f, 2.2f, 2.2f));
     }
 
     // --- Normal map ---
     float3 N = normalize(i.WorldNormal);
-    if (mat.NormalIndex >= 0)
-    {
+    if (mat.NormalIndex >= 0) {
         Texture2D<float4> normalTex = ResourceDescriptorHeap[mat.NormalIndex];
         float3 ts = normalTex.Sample(samp, i.UV).rgb * 2.0f - 1.0f;
         float3 T  = normalize(i.WorldTangent);
@@ -90,19 +89,18 @@ GBufferOut FSMain(VSOut i)
     }
 
     // --- ORM (Occlusion, Roughness, Metallic) ---
-    float3 orm = float3(1.0f, 0.5f, 0.0f); // defaults: full occlusion, mid roughness, non-metal
-    if (mat.ORMIndex >= 0)
-    {
+    float3 orm = float3(1.0f, 0.5f, 0.0f);
+    if (mat.ORMIndex >= 0) {
         Texture2D<float4> ormTex = ResourceDescriptorHeap[mat.ORMIndex];
         orm = ormTex.Sample(samp, i.UV).rgb;
     }
 
     // --- Emissive ---
     float3 emissive = float3(0.0f, 0.0f, 0.0f);
-    if (mat.EmissiveIndex >= 0)
-    {
+    if (mat.EmissiveIndex >= 0) {
         Texture2D<float4> emTex = ResourceDescriptorHeap[mat.EmissiveIndex];
         emissive = emTex.Sample(samp, i.UV).rgb;
+        emissive = pow(emissive, float3(2.2f, 2.2f, 2.2f));
     }
 
     GBufferOut o;

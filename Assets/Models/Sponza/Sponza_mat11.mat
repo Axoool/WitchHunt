@@ -8,8 +8,8 @@
   ],
   "emissive_texture": "",
   "metallic_factor": 1.0,
-  "normal_texture": "",
-  "orm_texture": "",
+  "normal_texture": "Assets/Models/Sponza/3628158980083700836.jpg",
+  "orm_texture": "Assets/Models/Sponza/3455394979645218238.jpg",
   "override_metallic": false,
   "override_roughness": false,
   "roughness_factor": 1.0

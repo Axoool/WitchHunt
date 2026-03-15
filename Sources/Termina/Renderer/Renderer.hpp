@@ -45,7 +45,7 @@ namespace Termina {
             return UpdateFlags::RenderUpdateDuringEditor | UpdateFlags::UpdateDuringEditor;
         }
         std::string GetName() const override { return "Renderer System"; }
-        int GetPriority() const override { return 0; }
+        int GetPriority() const override { return 1; }
 
         RendererDevice* GetDevice() const { return m_Device; }
         RendererSurface* GetSurface() const { return m_Surface; }

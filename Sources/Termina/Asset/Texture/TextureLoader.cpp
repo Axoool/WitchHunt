@@ -23,7 +23,7 @@ namespace Termina {
 
         TextureDesc desc;
         desc.SetSize(static_cast<uint32>(width), static_cast<uint32>(height))
-            .SetFormat(TextureFormat::RGBA8_SRGB)
+            .SetFormat(TextureFormat::RGBA8_UNORM)
             .SetUsage(TextureUsage::SHADER_READ);
 
         RendererTexture* texture = renderer->GetDevice()->CreateTexture(desc);
@@ -32,7 +32,7 @@ namespace Termina {
         TextureUploadDesc uploadDesc;
         uploadDesc.Width  = static_cast<uint32>(width);
         uploadDesc.Height = static_cast<uint32>(height);
-        uploadDesc.Format = TextureFormat::RGBA8_SRGB;
+        uploadDesc.Format = TextureFormat::RGBA8_UNORM;
 
         renderer->GetGPUUploader()->QueueTextureUpload(texture, pixels, dataSize, uploadDesc);
 
@@ -57,7 +57,7 @@ namespace Termina {
 
         TextureDesc desc;
         desc.SetSize(1, 1)
-            .SetFormat(TextureFormat::RGBA8_SRGB)
+            .SetFormat(TextureFormat::RGBA8_UNORM)
             .SetUsage(TextureUsage::SHADER_READ);
 
         RendererTexture* texture = renderer->GetDevice()->CreateTexture(desc);
@@ -67,7 +67,7 @@ namespace Termina {
         TextureUploadDesc uploadDesc;
         uploadDesc.Width  = 1;
         uploadDesc.Height = 1;
-        uploadDesc.Format = TextureFormat::RGBA8_SRGB;
+        uploadDesc.Format = TextureFormat::RGBA8_UNORM;
 
         renderer->GetGPUUploader()->QueueTextureUpload(texture, white, sizeof(white), uploadDesc);
 
