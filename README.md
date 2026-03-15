@@ -26,6 +26,15 @@ Termina is a game engine made in about a week.
 - Debug renderer
 - HDR rendering
 
+## Building
+
+```
+xmake
+xmake run Editor
+```
+
+woaw!
+
 ## Dependencies
 
 - cgltf
