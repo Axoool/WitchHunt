@@ -285,9 +285,15 @@ namespace Termina {
                 if (!IsAABBVisible(frustumPlanes, worldBounds.Min, worldBounds.Max))
                     continue;
 
-                // Material deduplication
-                MaterialAsset* matAsset = (inst.MaterialIndex < model->Materials.size())
-                    ? model->Materials[inst.MaterialIndex].Get() : nullptr;
+                // Material resolution: per-component override takes priority over the model's own material
+                MaterialAsset* matAsset = nullptr;
+                {
+                    auto overrideIt = meshComp.MaterialOverrides.find(inst.MaterialIndex);
+                    if (overrideIt != meshComp.MaterialOverrides.end() && overrideIt->second.IsValid())
+                        matAsset = overrideIt->second.Get();
+                    else if (inst.MaterialIndex < model->Materials.size())
+                        matAsset = model->Materials[inst.MaterialIndex].Get();
+                }
 
                 int32 matIdx = 0;
                 if (matAsset)
