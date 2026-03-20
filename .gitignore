@@ -4,9 +4,11 @@ build
 compile_commands.json
 .cache
 .vscode
+.vs
 .claude
 .zed
 vsxmake2022
 ImaginaryProject
 __TERMINA__/INCLUDE
 ReleaseAssets
+imgui.ini
