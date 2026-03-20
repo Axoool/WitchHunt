@@ -77,5 +77,5 @@ REGISTER_COMPONENT(Ingre_CrushedMushroom, "Ingredient: Mushroom (CRUSHED)")
 // --- POTIONS & FIELDS REGISTRATION ---
 REGISTER_COMPONENT(Potion_dmg, "Potion: Damage")
 REGISTER_COMPONENT(Field_dmg, "Field: Damage")
-
+REGISTER_COMPONENT(Controller, "Controller")
 COMPONENT_MODULE_END()
