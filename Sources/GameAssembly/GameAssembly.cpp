@@ -2,6 +2,7 @@
 #include <Termina/World/ComponentRegistry.hpp>
 #include <ImGui/imgui.h>
 
+#include "Controller.hpp"
 #include "FlyCamComponent.hpp"
 #include "ParticleSystem.hpp"
 #include "PhysicsTestComponent.hpp"
