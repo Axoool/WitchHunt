@@ -11,4 +11,12 @@ public:
 
 	void Start() override;
 	void Update(float deltaTime) override;
+
+	void Serialize(nlohmann::json& out) const override;
+	void Deserialize(const nlohmann::json& in) override;
+
+	
+	float m_moveSpeed = 5.f;
+	float m_sprintSpeed = 10.f;
+	float m_sensitivity = 0.15f;
 };
