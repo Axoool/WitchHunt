@@ -6,7 +6,8 @@
     "\\Sources\\GameAssembly",
     "\\Sources\\GameAssembly\\WH",
     "\\Sources\\Termina",
-    "\\Sources\\Termina\\Physics"
+    "\\Sources\\Termina\\Physics",
+    "\\Sources\\Termina\\World"
   ],
   "SelectedNode": "\\Sources\\GameAssembly\\WH\\ChoppingBlock.cpp",
   "PreviewInSolutionExplorer": false

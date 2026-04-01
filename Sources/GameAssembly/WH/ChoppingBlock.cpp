@@ -1,6 +1,8 @@
 #include "ChoppingBlock.hpp"
 #include "Ingredients.hpp"
 #include "Tools.hpp"
+#include <Termina/World/Actor.hpp>
+#include <Termina/World/World.hpp>
 #include <Termina/Physics/Components/Rigidbody.hpp>
 #include <Termina/World/Components/Transform.hpp>
 #include <Termina/Core/Logger.hpp>

@@ -7,10 +7,14 @@
 #include "PhysicsTestComponent.hpp"
 
 //
-#include "WH/Entities/SpawnerComponent.hpp"
+#include "WH/ChoppingBlock.hpp"
+#include "WH/Tools.hpp"
+#include "WH/Ingredients.hpp"
 
-#include "WH/Entities/Grabber.hpp"
-#include "WH/Entities/Grabbable.hpp"
+#include "WH/SpawnerComponent.hpp"
+
+#include "WH/Grabber.hpp"
+#include "WH/Grabbable.hpp"
 
 // 1. Move the ImGui context setup to the global scope (outside the macro)
 TERMINA_DLL_EXPORT void SetImGuiContext(void* ctx, void* allocFunc, void* freeFunc, void* userData)
@@ -31,4 +35,7 @@ REGISTER_COMPONENT(SpawnerComponent, "Spawner Component")
 
 REGISTER_COMPONENT(Grabber, "Grabber")
 REGISTER_COMPONENT(Grabbable, "Grabbable")
+REGISTER_COMPONENT(ChoppingBlock, "ChoppingBlock Component")
+REGISTER_COMPONENT(Ingredient, "Ingredient")
+REGISTER_COMPONENT(Tool, "Tools")
 COMPONENT_MODULE_END()
