@@ -1,0 +1,122 @@
+{
+    "actors": [
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            0.0,
+                            0.32333487272262573,
+                            1.4604742527008057
+                        ],
+                        "rotation": [
+                            1.0,
+                            -1.1635617802596698e-08,
+                            1.2947642399588788e-16,
+                            -1.1127593957382942e-08
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Transform"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "allow_sleep": false,
+                        "angular_damping": 0.05000000074505806,
+                        "freeze_pos": [
+                            false,
+                            false,
+                            false
+                        ],
+                        "freeze_rot": [
+                            false,
+                            false,
+                            false
+                        ],
+                        "gravity_factor": 1.0,
+                        "is_sensor": false,
+                        "linear_damping": 0.05000000074505806,
+                        "mass": 1.0,
+                        "type": 0
+                    },
+                    "type": "Rigidbody"
+                },
+                {
+                    "active": true,
+                    "data": {},
+                    "type": "Grabbable"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "half_extents": [
+                            0.1899999976158142,
+                            0.03999999910593033,
+                            0.3199999928474426
+                        ],
+                        "offset": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "rot_off": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Box Collider"
+                }
+            ],
+            "id": "8246381926097803464",
+            "name": "mushroom_cut",
+            "parentId": null
+        },
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            -0.17260904610157013,
+                            -0.016805529594421387,
+                            0.11397803574800491
+                        ],
+                        "rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "scale": [
+                            0.05000000074505806,
+                            0.05000000074505806,
+                            0.05000000074505806
+                        ]
+                    },
+                    "type": "Transform"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "model": "Assets\\Models\\Mushroom\\shroom_cut\\shroomcut.gltf"
+                    },
+                    "type": "Mesh Component"
+                }
+            ],
+            "id": "8424454056588104365",
+            "name": "mushroom_cut_mesh",
+            "parentId": "8246381926097803464"
+        }
+    ],
+    "version": 1
+}

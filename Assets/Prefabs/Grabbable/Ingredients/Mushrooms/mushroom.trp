@@ -1,0 +1,127 @@
+{
+    "actors": [
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            2.7772536277770996,
+                            0.10392174124717712,
+                            -0.7625253200531006
+                        ],
+                        "rotation": [
+                            1.0,
+                            -1.1635823859990069e-08,
+                            -1.8519935110816732e-05,
+                            -1.1127809784738929e-08
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Transform"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "allow_sleep": false,
+                        "angular_damping": 0.05000000074505806,
+                        "freeze_pos": [
+                            false,
+                            false,
+                            false
+                        ],
+                        "freeze_rot": [
+                            false,
+                            false,
+                            false
+                        ],
+                        "gravity_factor": 1.0,
+                        "is_sensor": false,
+                        "linear_damping": 0.05000000074505806,
+                        "mass": 1.0,
+                        "type": 0
+                    },
+                    "type": "Rigidbody"
+                },
+                {
+                    "active": true,
+                    "data": {},
+                    "type": "Grabbable"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "half_extents": [
+                            0.20000000298023224,
+                            0.20000000298023224,
+                            0.20000000298023224
+                        ],
+                        "offset": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "rot_off": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Box Collider"
+                },
+                {
+                    "active": true,
+                    "data": {},
+                    "type": "Ingredient: Mushroom"
+                }
+            ],
+            "id": "18102236742840033813",
+            "name": "mushroom",
+            "parentId": null
+        },
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            1.3173038269087556e-06,
+                            -0.1696031093597412,
+                            0.03542996942996979
+                        ],
+                        "rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "scale": [
+                            0.05000000074505806,
+                            0.05000000074505806,
+                            0.05000000074505806
+                        ]
+                    },
+                    "type": "Transform"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "model": "Assets\\Models\\Mushroom\\shroom\\shroom.gltf"
+                    },
+                    "type": "Mesh Component"
+                }
+            ],
+            "id": "17568328036897367906",
+            "name": "mushroom_mesh",
+            "parentId": "18102236742840033813"
+        }
+    ],
+    "version": 1
+}
