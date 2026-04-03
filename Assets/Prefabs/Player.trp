@@ -8,7 +8,7 @@
                     "data": {
                         "position": [
                             0.0,
-                            1.8448914289474487,
+                            1.75,
                             0.0
                         ],
                         "rotation": [
@@ -43,6 +43,38 @@
                         ]
                     },
                     "type": "Capsule Collider"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "moveSpeed": 5.0,
+                        "sensitivity": 0.15000000596046448,
+                        "sprintSpeed": 10.0
+                    },
+                    "type": "Controller"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "allow_sleep": false,
+                        "angular_damping": 0.05000000074505806,
+                        "freeze_pos": [
+                            false,
+                            false,
+                            false
+                        ],
+                        "freeze_rot": [
+                            false,
+                            false,
+                            false
+                        ],
+                        "gravity_factor": 1.0,
+                        "is_sensor": false,
+                        "linear_damping": 0.05000000074505806,
+                        "mass": 1.0,
+                        "type": 0
+                    },
+                    "type": "Rigidbody"
                 }
             ],
             "id": "18423814877500002466",
@@ -80,7 +112,7 @@
                         "far": 1000.0,
                         "fov": 75.0,
                         "near": 0.009999999776482582,
-                        "primary": false
+                        "primary": true
                     },
                     "type": "Camera Component"
                 }
