@@ -1,4 +1,5 @@
 #pragma once
+
 #include <Termina/Scripting/API/ScriptingAPI.hpp>
 
 using namespace TerminaScript;
@@ -15,8 +16,13 @@ public:
 	void Serialize(nlohmann::json& out) const override;
 	void Deserialize(const nlohmann::json& in) override;
 
+	void Inspect() override;
 	
-	float m_moveSpeed = 5.f;
-	float m_sprintSpeed = 10.f;
+	float m_moveSpeed = 7.f;
+	float m_sprintSpeed = 12.f;
 	float m_sensitivity = 0.15f;
+
+private:
+	bool isGrounded();
+	void setVelocity(glm::vec3 velocity);
 };
