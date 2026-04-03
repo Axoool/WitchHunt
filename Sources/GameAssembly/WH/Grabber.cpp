@@ -1,10 +1,10 @@
 #include "Grabber.hpp"
 #include "Grabbable.hpp"
+#include "ChoppingBlock.hpp"
 #include <Termina/Physics/Components/Rigidbody.hpp>
 #include <Termina/World/Components/Transform.hpp>
 #include <Termina/Core/Logger.hpp>
 
-// --- NEW INCLUDES REQUIRED FOR RAYCAST ---
 #include <Termina/Core/Application.hpp>
 #include <Termina/Physics/PhysicsSystem.hpp>
 
@@ -23,15 +23,33 @@ void Grabber::Update(float deltaTime)
 
     glm::vec3 trueForward = cameraTr.GetRotation() * glm::vec3(0.0f, 0.0f, -1.0f);
     reachRay.Direction = glm::normalize(trueForward);
-    reachRay.MaxDistance = reachDistance; // Max reach distance
+    reachRay.MaxDistance = reachDistance;
 
     Termina::RayResult hit = physics->Raycast(reachRay);
 
-    // Determine what we are currently looking at
+    // ==========================================
+    // RAYCAST INTERCEPTION LOGIC
+    // ==========================================
     Termina::Actor* currentHitItem = nullptr;
-    if (hit.Hit && hit.HitActor != nullptr && hit.HitActor->HasComponent<Grabbable>())
+    if (hit.Hit && hit.HitActor != nullptr)
     {
-        currentHitItem = hit.HitActor;
+        // 1. Did we directly hit a Grabbable item?
+        if (hit.HitActor->HasComponent<Grabbable>())
+        {
+            currentHitItem = hit.HitActor;
+        }
+        // 2. NEW: Did we hit the Chopping Block? 
+        else if (hit.HitActor->HasComponent<ChoppingBlock>())
+        {
+            // Ask the block what ingredient it is currently holding
+            Termina::Actor* boardIngredient = hit.HitActor->GetComponent<ChoppingBlock>().GetCurrentIngredient();
+
+            if (boardIngredient != nullptr && boardIngredient->HasComponent<Grabbable>())
+            {
+                // Reroute! Pretend we looked directly at the ingredient.
+                currentHitItem = boardIngredient;
+            }
+        }
     }
 
     // Handle Highlighting (Scaling up and down)
@@ -64,10 +82,8 @@ void Grabber::Update(float deltaTime)
         {
             m_HeldItem = m_HoveredItem;
 
-            // --- THE FIX: RESET SCALE IMMEDIATELY ---
             auto& itemTr = m_HeldItem->GetComponent<Termina::Transform>();
             itemTr.SetScale(m_OriginalScale);
-            // ----------------------------------------
 
             auto& rb = m_HeldItem->GetComponent<Termina::Rigidbody>();
             rb.Type = Termina::Rigidbody::BodyType::Static;
@@ -78,7 +94,6 @@ void Grabber::Update(float deltaTime)
             {
                 handTarget->AttachChild(m_HeldItem);
 
-                auto& itemTr = m_HeldItem->GetComponent<Termina::Transform>();
                 auto& handTr = handTarget->GetComponent<Termina::Transform>();
 
                 itemTr.SetPosition(handTr.GetPosition());
@@ -87,16 +102,13 @@ void Grabber::Update(float deltaTime)
                 TN_INFO("Item GRABBED!");
             }
         }
-        // STATE 2: WE ARE HOLDING SOMETHING -> THROW!
         else if (m_HeldItem != nullptr)
         {
-            // 1. Make it a physics object again
             auto& rb = m_HeldItem->GetComponent<Termina::Rigidbody>();
             rb.Type = Termina::Rigidbody::BodyType::Dynamic;
 
-            m_HeldItem->AttachChildSilent(nullptr);
+            m_HeldItem->DetachFromParent();
 
-            // 2. Throw it in the exact direction the camera is looking
             float throwStrength = 5.0f;
             glm::vec3 throwForce = reachRay.Direction * throwStrength;
 

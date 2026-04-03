@@ -14,10 +14,17 @@ namespace TerminaScript {
 
         void Inspect() override {
             // Ingredient Identity
-            const char* types[] = { "Mushroom", "Flower"};
+            const char* types[] = { "Mushroom", "Flower", "Flower Cut", "Flower Crush", "Mushroom Cut", "Mushroom Crush" };
             int currentType = (int)IngredientType;
             if (ImGui::Combo("Ingredient Type", &currentType, types, IM_ARRAYSIZE(types))) {
                 IngredientType = (Type)currentType;
+            }
+
+            // --- NEW: State Dropdown ---
+            const char* states[] = { "Uncut", "Processed" };
+            int currentStateInt = (int)CurrentState;
+            if (ImGui::Combo("Processing State", &currentStateInt, states, IM_ARRAYSIZE(states))) {
+                CurrentState = (State)currentStateInt;
             }
 
             // Results for different tools
@@ -33,7 +40,16 @@ namespace TerminaScript {
             InputString("Prefab when CRUSHED (Mortar)", CrushedPrefabName);
         }
 
-        enum class Type { Mushroom, Flower};
+        // --- FIX: Expanded the enum to match the 6 elements in the types array ---
+        enum class Type {
+            Mushroom,
+            Flower,
+            FlowerCut,
+            FlowerCrush,
+            MushroomCut,
+            MushroomCrush
+        };
+
         enum class State { Uncut, Processed };
 
         Type IngredientType = Type::Mushroom;
