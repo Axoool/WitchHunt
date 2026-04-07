@@ -1,162 +1,130 @@
 #include "ChoppingBlock.hpp"
 #include "GameAssembly/WH/Ingredients/Ingre_Flower.hpp"
-#include "GameAssembly/WH/Ingredients/Ingre_Mushroom.hpp"
 #include "GameAssembly/WH/Tools/Knife.hpp"
+#include <Termina/World/World.hpp>
 #include <Termina/Physics/Components/Rigidbody.hpp>
 #include <Termina/World/Components/Transform.hpp>
 #include <Termina/Core/Logger.hpp>
-#include <Termina/World/World.hpp>
+#include <ImGui/imgui.h>
 
-using namespace TerminaScript;
+namespace TerminaScript {
 
-void ChoppingBlock::OnCollisionEnter(Termina::Actor* other)
-{
-    if (other == nullptr) return;
+    void ChoppingBlock::OnUpdate(float deltaTime) {
+        auto* world = m_Owner->GetParentWorld();
+        Termina::Actor* itemPos = world->GetActorByName("chopping_itemPos");
+        if (!itemPos) return;
 
-    Termina::World* world = m_Owner->GetParentWorld();
-    if (world == nullptr) return;
+        glm::vec3 targetPos = itemPos->GetComponent<Termina::Transform>().GetPosition();
 
-    // Check if the colliding object is an ingredient
-    bool isIngredient = false;
-    bool isProcessed = false;
-
-    if (other->HasComponent<Ingre_Flower>())
-    {
-        isIngredient = true;
-        isProcessed = (other->GetComponent<Ingre_Flower>().CurrentState == Ingre_Flower::State::Processed);
-    }
-    else if (other->HasComponent<Ingre_Mushroom>())
-    {
-        isIngredient = true;
-        isProcessed = (other->GetComponent<Ingre_Mushroom>().CurrentState == Ingre_Mushroom::State::Processed);
-    }
-
-    // ==========================================
-    // SCENARIO 1: AN INGREDIENT LANDS ON THE BOARD
-    // ==========================================
-    if (isIngredient)
-    {
-        if (isProcessed)
-        {
-            TN_INFO(">>> Item is already processed! Ignoring.");
-            return;
+        // --- PART A: SLOT MAINTENANCE ---
+        if (m_SlottedItemID != 0) {
+            Termina::Actor* currentItem = GetSlottedItem();
+            if (currentItem == nullptr) {
+                m_SlottedItemID = 0;
+            }
         }
 
-        Termina::Actor* snapPos = world->GetActorByName("chopping_itemPos");
-        if (snapPos != nullptr)
-        {
-            auto& itemTr = other->GetComponent<Termina::Transform>();
-            auto& snapTr = snapPos->GetComponent<Termina::Transform>();
+        // --- PART B: THE SENSORS (Proximity Check) ---
+        // FIX: world->GetActors() returns shared_ptr. Use .get() to get the raw pointer.
+        for (const auto& actorPtr : world->GetActors()) {
+            Termina::Actor* actor = actorPtr.get(); // Access the actual Actor pointer
 
-            // Use Kinematic instead of Static to stop sinking into the collision mesh
-            if (other->HasComponent<Termina::Rigidbody>())
-            {
-                auto& rb = other->GetComponent<Termina::Rigidbody>();
-                rb.Type = Termina::Rigidbody::BodyType::Kinematic;
-                rb.SetLinearVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
+            if (!actor || actor == m_Owner) continue;
+
+            float dist = glm::distance(actor->GetComponent<Termina::Transform>().GetPosition(), targetPos);
+
+            // 1. KNIFE SENSOR: If a knife gets close and we have an item, CHOP!
+            if (dist < 0.7f && actor->HasComponent<Knife>() && m_SlottedItemID != 0) {
+                PerformChop(actor);
+                break;
             }
 
-            itemTr.SetPosition(snapTr.GetPosition());
-            itemTr.SetRotation(snapTr.GetRotation());
+            // 2. INGREDIENT SENSOR: Catching the throw
+            if (m_SlottedItemID == 0 && dist < 0.5f) {
+                if (IsRawIngredient(actor) && !IsPlayerHolding(actor)) {
+                    m_SlottedItemID = actor->GetID();
 
-            // Assign the ID instead of the pointer for memory safety!
-            m_CurrentIngredientID = other->GetID();
-            TN_INFO((">>> Ingredient placed on board: " + other->GetName()).c_str());
-        }
-    }
-    // ==========================================
-    // SCENARIO 2: A TOOL (KNIFE) HITS THE BOARD
-    // ==========================================
-    else if (other->HasComponent<Knife>())
-    {
-        // Resolve the ID safely at the exact moment of collision
-        Termina::Actor* currentIngredient = GetCurrentIngredient();
+                    actor->DetachFromParent();
+                    itemPos->AttachChild(actor);
 
-        if (currentIngredient != nullptr)
-        {
-            std::string prefabToSpawn = "";
-            bool isReadyToCut = false;
+                    auto& tr = actor->GetComponent<Termina::Transform>();
+                    tr.SetPosition(targetPos);
+                    tr.SetRotation(itemPos->GetComponent<Termina::Transform>().GetRotation());
 
-            // Verify the prefab name AND that it is truly Unprocessed
-            if (currentIngredient->HasComponent<Ingre_Flower>())
-            {
-                auto& flower = currentIngredient->GetComponent<Ingre_Flower>();
-                if (flower.CurrentState == Ingre_Flower::State::Unprocessed)
-                {
-                    prefabToSpawn = flower.CutPrefabName;
-                    isReadyToCut = true;
-                }
-            }
-            else if (currentIngredient->HasComponent<Ingre_Mushroom>())
-            {
-                auto& mushroom = currentIngredient->GetComponent<Ingre_Mushroom>();
-                if (mushroom.CurrentState == Ingre_Mushroom::State::Unprocessed)
-                {
-                    prefabToSpawn = mushroom.CutPrefabName;
-                    isReadyToCut = true;
-                }
-            }
-
-            // Only proceed if we have a valid, UNPROCESSED ingredient
-            if (isReadyToCut && !prefabToSpawn.empty())
-            {
-                TN_INFO((">>> Chopping into " + prefabToSpawn).c_str());
-
-                Termina::Actor* snapPos = world->GetActorByName("chopping_itemPos");
-
-                // 2. Clear the ID immediately so nothing else (like the Grabber) can access it!
-                m_CurrentIngredientID = 0;
-
-                // 3. DESTROY CHILDREN FIRST (Memory Leak Fix)
-                auto children = currentIngredient->GetChildren();
-                for (Termina::Actor* child : children)
-                {
-                    if (child != nullptr)
-                    {
-                        child->DetachFromParent(); // <--- THE MAGIC BULLET
-                        world->DestroyActor(child);
+                    if (actor->HasComponent<Termina::Rigidbody>()) {
+                        auto& rb = actor->GetComponent<Termina::Rigidbody>();
+                        rb.Type = Termina::Rigidbody::BodyType::Static;
+                        rb.SetLinearVelocity(glm::vec3(0));
                     }
-                }
-
-                // 4. Destroy the raw ingredient safely
-                world->DestroyActor(currentIngredient);
-
-                // 5. Spawn the new cut prefab
-                Termina::Actor* newIngredient = world->SpawnActorFromJSON(prefabToSpawn);
-
-                if (newIngredient != nullptr && snapPos != nullptr)
-                {
-                    auto& newTr = newIngredient->GetComponent<Termina::Transform>();
-                    auto& snapTr = snapPos->GetComponent<Termina::Transform>();
-
-                    // Apply Kinematic to the newly spawned item as well
-                    if (newIngredient->HasComponent<Termina::Rigidbody>())
-                    {
-                        auto& rb = newIngredient->GetComponent<Termina::Rigidbody>();
-                        rb.Type = Termina::Rigidbody::BodyType::Kinematic;
-                        rb.SetLinearVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
-                    }
-
-                    newTr.SetPosition(snapTr.GetPosition());
-                    newTr.SetRotation(snapTr.GetRotation());
-
-                    // 6. Officially assign the newly spawned ID
-                    m_CurrentIngredientID = newIngredient->GetID();
-                    TN_INFO(">>> Chopping successful!");
+                    TN_INFO("Board: Caught flying ingredient!");
+                    break;
                 }
             }
         }
     }
-}
 
-void ChoppingBlock::OnCollisionExit(Termina::Actor* other)
-{
-    if (other == nullptr) return;
+    void ChoppingBlock::PerformChop(Termina::Actor* knifeActor) {
+        Termina::Actor* rawItem = GetSlottedItem();
+        if (!rawItem) return;
 
-    // If the player picks up the current item, we cleanly forget about it
-    if (m_CurrentIngredientID != 0 && other->GetID() == m_CurrentIngredientID)
-    {
-        m_CurrentIngredientID = 0;
-        TN_INFO(">>> Ingredient removed from chopping block.");
+        std::string prefabPath = GetCutPrefabPath(rawItem);
+        if (prefabPath.empty()) return;
+
+        auto* world = m_Owner->GetParentWorld();
+        Termina::Actor* cutItem = world->SpawnActorFromJSON(prefabPath);
+
+        if (cutItem) {
+            auto& cutTr = cutItem->GetComponent<Termina::Transform>();
+            cutTr.SetPosition(rawItem->GetComponent<Termina::Transform>().GetPosition() + glm::vec3(0, 0.3f, 0));
+
+            if (cutItem->HasComponent<Termina::Rigidbody>()) {
+                auto& rb = cutItem->GetComponent<Termina::Rigidbody>();
+                rb.Type = Termina::Rigidbody::BodyType::Dynamic;
+                rb.SetLinearVelocity(glm::vec3(0, 4.0f, 2.0f));
+            }
+        }
+
+        m_SlottedItemID = 0;
+        rawItem->DetachFromParent();
+        rawItem->GetComponent<Termina::Transform>().SetPosition(glm::vec3(0, -9999, 0));
+        world->DestroyActor(rawItem);
+        TN_INFO("Board: Item Chopped!");
+    }
+
+    Termina::Actor* ChoppingBlock::GetSlottedItem() const {
+        if (m_SlottedItemID == 0) return nullptr;
+        return m_Owner->GetParentWorld()->GetActorById(m_SlottedItemID);
+    }
+
+    void ChoppingBlock::ClearSlot() {
+        m_SlottedItemID = 0;
+    }
+
+    void ChoppingBlock::Inspect() {
+        ImGui::Text("Slot ID: %llu", m_SlottedItemID);
+        if (m_SlottedItemID != 0) ImGui::Text("STATUS: OCCUPIED");
+        else ImGui::Text("STATUS: EMPTY");
+    }
+
+    bool ChoppingBlock::IsRawIngredient(Termina::Actor* actor) {
+        if (!actor) return false;
+        if (actor->HasComponent<Ingre_Flower>()) {
+            return actor->GetComponent<Ingre_Flower>().CurrentState == Ingre_Flower::State::Unprocessed;
+        }
+        return false;
+    }
+
+    bool ChoppingBlock::IsPlayerHolding(Termina::Actor* actor) {
+        if (!actor) return false;
+        auto* parent = actor->GetParent();
+        return (parent != nullptr && parent->GetName() == "GrabbedPos");
+    }
+
+    std::string ChoppingBlock::GetCutPrefabPath(Termina::Actor* actor) {
+        if (!actor) return "";
+        if (actor->HasComponent<Ingre_Flower>()) {
+            return actor->GetComponent<Ingre_Flower>().CutPrefabName;
+        }
+        return "";
     }
 }

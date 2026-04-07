@@ -1,32 +1,33 @@
 #pragma once
 #include <Termina/World/Component.hpp>
-#include <Termina/Physics/IPhysicsCallbacks.hpp>
-#include <Termina/World/World.hpp> // Need this to access GetActorById
-#include <Termina/World/Actor.hpp> 
+#include <Termina/World/Actor.hpp>
+#include <string>
 
 namespace TerminaScript {
 
-    class ChoppingBlock : public Termina::Component, public Termina::IPhysicsCallbacks {
+    class ChoppingBlock : public Termina::Component {
     public:
         ChoppingBlock(Termina::Actor* owner) : Termina::Component(owner) {}
 
-        // Safely resolves the ID to the actor. Returns nullptr if destroyed or restarted!
-        Termina::Actor* GetCurrentIngredient() const
-        {
-            if (m_CurrentIngredientID == 0) return nullptr;
-            return m_Owner->GetParentWorld()->GetActorById(m_CurrentIngredientID);
-        }
-
+        // 1 = Update is active
         Termina::UpdateFlags GetUpdateFlags() const override {
-            return static_cast<Termina::UpdateFlags>(0);
+            return static_cast<Termina::UpdateFlags>(1);
         }
 
-        void OnCollisionEnter(Termina::Actor* other) override;
-        void OnCollisionExit(Termina::Actor* other);
+        void OnUpdate(float deltaTime);
+        void Inspect() override;
+
+        // Public Logic
+        Termina::Actor* GetSlottedItem() const;
+        void ClearSlot();
+        void PerformChop(Termina::Actor* knifeActor);
 
     private:
-        // Store the ID instead of the raw pointer! (0 means no item)
-        uint64 m_CurrentIngredientID = 0;
-    };
+        uint64 m_SlottedItemID = 0;
 
+        // Internal Helpers
+        bool IsRawIngredient(Termina::Actor* actor);
+        bool IsPlayerHolding(Termina::Actor* actor);
+        std::string GetCutPrefabPath(Termina::Actor* actor);
+    };
 }

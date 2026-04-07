@@ -33,54 +33,64 @@ void Grabber::Update(float deltaTime)
 
     Termina::RayResult hit = physics->Raycast(reachRay);
 
+    // ==========================================
     // 1. Determine what we are looking at
+    // ==========================================
     uint64 currentHitID = 0;
-    if (hit.Hit && hit.HitActor != nullptr)
-    {
-        if (hit.HitActor->HasComponent<Grabbable>())
-        {
+    // Part 1: Determine what we are looking at
+    if (hit.Hit && hit.HitActor != nullptr) {
+        if (m_HeldItemID != 0 && hit.HitActor->GetID() == m_HeldItemID) {
+            currentHitID = m_HoveredItemID;
+        }
+        else if (hit.HitActor->HasComponent<Grabbable>()) {
             currentHitID = hit.HitActor->GetID();
         }
-        else if (hit.HitActor->HasComponent<ChoppingBlock>())
-        {
-            Termina::Actor* boardIngredient = hit.HitActor->GetComponent<ChoppingBlock>().GetCurrentIngredient();
-            if (boardIngredient != nullptr)
-                currentHitID = boardIngredient->GetID();
+        // NEW LOGIC: Ask the board for its item
+        else if (hit.HitActor->HasComponent<ChoppingBlock>()) {
+            auto& board = hit.HitActor->GetComponent<ChoppingBlock>();
+            Termina::Actor* itemOnBoard = board.GetSlottedItem();
+            if (itemOnBoard) {
+                currentHitID = itemOnBoard->GetID();
+            }
         }
     }
 
     // ==========================================
-    // 2. Handle Highlighting (Fixed Hover-while-holding Logic)
+    // 2. Handle Highlighting & Memory Safety
     // ==========================================
     if (m_HoveredItemID != currentHitID)
     {
-        // Reset the OLD item scale BEFORE losing the ID
         Termina::Actor* oldHover = GetHoveredItem();
 
-        // Only reset if it's NOT the item we are currently holding in our hand
-        if (oldHover != nullptr && m_HoveredItemID != m_HeldItemID)
+        // FIX FOR THE DELAYED CRASH: 
+        // Ensure oldHover isn't corrupted, dangling memory before touching its scale.
+        // We do this by checking if the ID matches and if it actually has a transform.
+        if (oldHover != nullptr && oldHover->GetID() == m_HoveredItemID && m_HoveredItemID != m_HeldItemID)
         {
-            oldHover->GetComponent<Termina::Transform>().SetScale(m_OriginalScale);
+            if (oldHover->HasComponent<Termina::Transform>())
+            {
+                oldHover->GetComponent<Termina::Transform>().SetScale(m_OriginalScale);
+            }
         }
 
         m_HoveredItemID = currentHitID;
 
-        // Setup the NEW item highlight
         Termina::Actor* newHover = GetHoveredItem();
 
-        // Only highlight if it's a valid item AND it's not the one we are holding
         if (newHover != nullptr && m_HoveredItemID != m_HeldItemID)
         {
-            auto& itemTr = newHover->GetComponent<Termina::Transform>();
-
-            // CRITICAL: Always capture the scale so we know how to "un-shrink" it later
-            m_OriginalScale = itemTr.GetScale();
-
-            itemTr.SetScale(m_OriginalScale * hoverSize);
+            if (newHover->HasComponent<Termina::Transform>())
+            {
+                auto& itemTr = newHover->GetComponent<Termina::Transform>();
+                m_OriginalScale = itemTr.GetScale();
+                itemTr.SetScale(m_OriginalScale * hoverSize);
+            }
         }
     }
 
-    // 3. INPUT: Grab or Throw
+    // ==========================================
+        // 3. INPUT: Grab or Throw
+        // ==========================================
     if (Input::IsMouseButtonPressed(Termina::MouseButton::Left))
     {
         Termina::Actor* heldItem = GetHeldItem();
@@ -89,33 +99,62 @@ void Grabber::Update(float deltaTime)
         if (heldItem == nullptr && hoveredItem != nullptr)
         {
             m_HeldItemID = m_HoveredItemID;
-            heldItem = hoveredItem; // Resolved for this frame
+            heldItem = hoveredItem;
 
+            // Define the transform for the item we just picked up
             auto& itemTr = heldItem->GetComponent<Termina::Transform>();
-            itemTr.SetScale(m_OriginalScale); // Reset scale while held
+            itemTr.SetScale(m_OriginalScale); // Reset scale from the hover effect
 
-            auto& rb = heldItem->GetComponent<Termina::Rigidbody>();
-            rb.Type = Termina::Rigidbody::BodyType::Static;
+            // Handle Physics: Change to Kinematic so it follows the hand perfectly
+            if (heldItem->HasComponent<Termina::Rigidbody>())
+            {
+                auto& rb = heldItem->GetComponent<Termina::Rigidbody>();
+                rb.Type = Termina::Rigidbody::BodyType::Kinematic;
+                rb.SetLinearVelocity(glm::vec3(0.0f));
+            }
 
+            // BOARD SAFETY: If we took it from a chopping block, tell the block it's empty!
+            // Path: Item -> itemPos -> ChoppingBlock
+            if (heldItem->GetParent() && heldItem->GetParent()->GetParent()) {
+                auto* boardActor = heldItem->GetParent()->GetParent();
+                if (boardActor->HasComponent<ChoppingBlock>()) {
+                    boardActor->GetComponent<ChoppingBlock>().ClearSlot();
+                }
+            }
+
+            // ATTACH TO HAND
             Termina::Actor* handTarget = world->GetActorByName("GrabbedPos");
             if (handTarget != nullptr)
             {
+                // THE ORPHAN GUARD: Only detach if it actually has a parent
+                if (heldItem->GetParent() != nullptr)
+                {
+                    heldItem->DetachFromParent();
+                }
+
                 handTarget->AttachChild(heldItem);
-                itemTr.SetPosition(handTarget->GetComponent<Termina::Transform>().GetPosition());
-                itemTr.SetRotation(handTarget->GetComponent<Termina::Transform>().GetRotation());
+
+                // Snap to the hand's position and rotation
+                auto& handTr = handTarget->GetComponent<Termina::Transform>();
+                itemTr.SetPosition(handTr.GetPosition());
+                itemTr.SetRotation(handTr.GetRotation());
+
                 TN_INFO("Item GRABBED!");
             }
         }
         else if (heldItem != nullptr)
         {
-            auto& rb = heldItem->GetComponent<Termina::Rigidbody>();
-            rb.Type = Termina::Rigidbody::BodyType::Dynamic;
+            // ... (Your existing THROW logic remains the same)
+            if (heldItem->HasComponent<Termina::Rigidbody>())
+            {
+                auto& rb = heldItem->GetComponent<Termina::Rigidbody>();
+                rb.Type = Termina::Rigidbody::BodyType::Dynamic;
 
-            heldItem->DetachFromParent(); // <--- CRITICAL FIX FOR CRASH
+                glm::vec3 throwForce = reachRay.Direction * 5.0f;
+                rb.SetLinearVelocity(throwForce);
+            }
 
-            glm::vec3 throwForce = reachRay.Direction * 5.0f;
-            rb.SetLinearVelocity(throwForce);
-
+            heldItem->DetachFromParent();
             m_HeldItemID = 0;
             TN_INFO("Item THROWN!");
         }
