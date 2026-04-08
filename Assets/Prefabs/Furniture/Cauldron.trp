@@ -1,0 +1,446 @@
+{
+    "actors": [
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            -3.0210044384002686,
+                            0.1929798126220703,
+                            -0.48727792501449585
+                        ],
+                        "rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Transform"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "half_extents": [
+                            0.30000001192092896,
+                            0.30000001192092896,
+                            0.30000001192092896
+                        ],
+                        "offset": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "rot_off": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Box Collider"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "allow_sleep": true,
+                        "angular_damping": 0.05000000074505806,
+                        "freeze_pos": [
+                            false,
+                            false,
+                            false
+                        ],
+                        "freeze_rot": [
+                            false,
+                            false,
+                            false
+                        ],
+                        "gravity_factor": 25.0,
+                        "is_sensor": false,
+                        "linear_damping": 0.05000000074505806,
+                        "mass": 1.0,
+                        "type": 1
+                    },
+                    "type": "Rigidbody"
+                }
+            ],
+            "id": "14522136263842992934",
+            "name": "Cauldron",
+            "parentId": null
+        },
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            0.0,
+                            -0.2783171832561493,
+                            -0.005628347396850586
+                        ],
+                        "rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "scale": [
+                            0.3499999940395355,
+                            0.30000001192092896,
+                            0.3499999940395355
+                        ]
+                    },
+                    "type": "Transform"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "model": "Assets\\Models\\Furniture\\Cauldron\\cauldron.gltf"
+                    },
+                    "type": "Mesh Component"
+                }
+            ],
+            "id": "3063379565080475763",
+            "name": "cauldron_mesh",
+            "parentId": "14522136263842992934"
+        },
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            0.023261547088623047,
+                            0.2112753987312317,
+                            0.20376330614089966
+                        ],
+                        "rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Transform"
+                }
+            ],
+            "id": "1948280912285827657",
+            "name": "cauldron_itemPos1",
+            "parentId": "14522136263842992934"
+        },
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            -0.0021085739135742188,
+                            0.20782265067100525,
+                            0.00689387321472168
+                        ],
+                        "rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Transform"
+                }
+            ],
+            "id": "13532378589602939241",
+            "name": "cauldron_itemPos2",
+            "parentId": "14522136263842992934"
+        },
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            -0.006552219390869141,
+                            0.22621119022369385,
+                            -0.1944679617881775
+                        ],
+                        "rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Transform"
+                }
+            ],
+            "id": "11983157985382694116",
+            "name": "cauldron_itemPos3",
+            "parentId": "14522136263842992934"
+        },
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            0.017496824264526367,
+                            0.4383738040924072,
+                            -0.00887337327003479
+                        ],
+                        "rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Transform"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "half_extents": [
+                            0.36000001430511475,
+                            0.4099999964237213,
+                            0.47999998927116394
+                        ],
+                        "offset": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "rot_off": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Box Collider"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "allow_sleep": true,
+                        "angular_damping": 0.05000000074505806,
+                        "freeze_pos": [
+                            true,
+                            true,
+                            true
+                        ],
+                        "freeze_rot": [
+                            false,
+                            false,
+                            false
+                        ],
+                        "gravity_factor": 1.0,
+                        "is_sensor": false,
+                        "linear_damping": 0.05000000074505806,
+                        "mass": 1.0,
+                        "type": 2
+                    },
+                    "type": "Rigidbody"
+                },
+                {
+                    "active": true,
+                    "data": {},
+                    "type": "CauldronBlock Component"
+                }
+            ],
+            "id": "4383157473886649704",
+            "name": "cauldron_IntakeBox",
+            "parentId": "14522136263842992934"
+        },
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            0.10286879539489746,
+                            0.5755007863044739,
+                            -0.4632272720336914
+                        ],
+                        "rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Transform"
+                }
+            ],
+            "id": "8849937123032183219",
+            "name": "cauldron_resultPos",
+            "parentId": "14522136263842992934"
+        },
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            -0.04593706130981445,
+                            0.23406752943992615,
+                            -0.18761670589447021
+                        ],
+                        "rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Transform"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "color": [
+                            1.0,
+                            1.0,
+                            0.0
+                        ],
+                        "intensity": 1.0,
+                        "range": 0.20000000298023224
+                    },
+                    "type": "Point Light"
+                }
+            ],
+            "id": "3967478286704003492",
+            "name": "cauldron_light1",
+            "parentId": "14522136263842992934"
+        },
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            -0.09868025779724121,
+                            0.2583911418914795,
+                            -0.022892355918884277
+                        ],
+                        "rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Transform"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "color": [
+                            1.0,
+                            1.0,
+                            0.0
+                        ],
+                        "intensity": 1.0,
+                        "range": 0.20000000298023224
+                    },
+                    "type": "Point Light"
+                }
+            ],
+            "id": "15495001229396136149",
+            "name": "cauldron_light2",
+            "parentId": "14522136263842992934"
+        },
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            -0.012140989303588867,
+                            0.254060298204422,
+                            0.14909905195236206
+                        ],
+                        "rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Transform"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "color": [
+                            1.0,
+                            1.0,
+                            0.0
+                        ],
+                        "intensity": 1.0,
+                        "range": 0.20000000298023224
+                    },
+                    "type": "Point Light"
+                }
+            ],
+            "id": "14167848964263027519",
+            "name": "cauldron_light3",
+            "parentId": "14522136263842992934"
+        }
+    ],
+    "version": 1
+}

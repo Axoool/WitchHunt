@@ -8,6 +8,9 @@ namespace TerminaScript {
     public:
         CauldronBlock(Termina::Actor* owner) : Termina::Component(owner) {}
 
+        // ADD THIS LINE TO FIX THE ERROR:
+        Termina::UpdateFlags GetUpdateFlags() const override { return static_cast<Termina::UpdateFlags>(1); }
+
         void OnUpdate(float deltaTime) override;
         void Inspect() override;
 

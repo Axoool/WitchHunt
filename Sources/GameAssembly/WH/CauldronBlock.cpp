@@ -3,6 +3,8 @@
 #include "GameAssembly/WH/Ingredients/Ingre_CutFlower.hpp"
 #include "GameAssembly/WH/Ingredients/Ingre_Mushroom.hpp"
 #include "GameAssembly/WH/Ingredients/Ingre_CutMushroom.hpp"
+#include "GameAssembly/WH/Ingredients/Ingre_CrushedFlower.hpp"
+#include "GameAssembly/WH/Ingredients/Ingre_CrushedMushroom.hpp"
 #include <Termina/World/World.hpp>
 #include <Termina/Physics/Components/Rigidbody.hpp>
 #include <Termina/World/Components/Transform.hpp>
@@ -55,12 +57,15 @@ namespace TerminaScript {
                     tr.SetPosition(targetPos->GetComponent<Termina::Transform>().GetPosition());
                     tr.SetRotation(targetPos->GetComponent<Termina::Transform>().GetRotation());
 
+                    // ADD THIS LINE: Shrink to 0.5 scale
+                    tr.SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
+
                     if (actor->HasComponent<Termina::Rigidbody>()) {
                         auto& rb = actor->GetComponent<Termina::Rigidbody>();
                         rb.Type = Termina::Rigidbody::BodyType::Static;
                         rb.SetLinearVelocity(glm::vec3(0));
                     }
-                    TN_INFO("Cauldron: Item docked at %s!", posName.c_str());
+                    TN_INFO("Cauldron: Item docked at %s and shrunk!", posName.c_str());
                 }
                 else {
                     TN_ERROR("Cauldron: Could not find %s", posName.c_str());
@@ -81,6 +86,21 @@ namespace TerminaScript {
 
         // Remove it from our list
         m_SlottedItems.pop_back();
+
+        if (itemToReturn) {
+            itemToReturn->DetachFromParent();
+
+            // ADD THIS: Restore normal size
+            auto& tr = itemToReturn->GetComponent<Termina::Transform>();
+            tr.SetScale(glm::vec3(1.0f, 1.0f, 1.0f));
+
+            // Wake physics back up
+            if (itemToReturn->HasComponent<Termina::Rigidbody>()) {
+                auto& rb = itemToReturn->GetComponent<Termina::Rigidbody>();
+                rb.Type = Termina::Rigidbody::BodyType::Dynamic;
+            }
+            TN_INFO("Cauldron: Item popped and restored to normal size.");
+        }
 
         return itemToReturn;
     }
@@ -108,9 +128,11 @@ namespace TerminaScript {
 
         if (actor->HasComponent<Ingre_Flower>()) return true;
         if (actor->HasComponent<Ingre_CutFlower>()) return true;
+        if (actor->HasComponent<Ingre_CrushedFlower>()) return true; // ADDED
+
         if (actor->HasComponent<Ingre_Mushroom>()) return true;
         if (actor->HasComponent<Ingre_CutMushroom>()) return true;
-        // NOTE: If you make Ingre_CrushedFlower.hpp later, add it here too!
+        if (actor->HasComponent<Ingre_CrushedMushroom>()) return true; // ADDED
 
         return false;
     }

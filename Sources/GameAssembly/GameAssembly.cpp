@@ -9,6 +9,7 @@
 // --- STATIONS ---
 #include "WH/ChoppingBlock.hpp"
 #include "WH/MortarPestleBlock.hpp"
+#include "WH/CauldronBlock.hpp"
 
 // --- INGREDIENTS ---
 #include "WH/Ingredients/Ingre_Flower.hpp"
@@ -18,6 +19,10 @@
 #include "WH/Ingredients/Ingre_Mushroom.hpp"
 #include "WH/Ingredients/Ingre_CutMushroom.hpp"
 #include "WH/Ingredients/Ingre_CrushedMushroom.hpp"
+
+// --- POTIONS & FIELDS ---
+#include "WH/Potions/Potion_dmg.hpp"
+#include "WH/Potions/Fields/Field_dmg.hpp"
 
 // --- CORE / UTILS ---
 #include "WH/SpawnerComponent.hpp"
@@ -51,6 +56,7 @@ REGISTER_COMPONENT(Grabbable, "Grabbable")
 // --- STATIONS REGISTRATION ---
 REGISTER_COMPONENT(ChoppingBlock, "ChoppingBlock Component")
 REGISTER_COMPONENT(MortarPestleBlock, "MortarPestleBlock Component")
+REGISTER_COMPONENT(CauldronBlock, "CauldronBlock Component")
 
 // --- TOOLS REGISTRATION ---
 REGISTER_COMPONENT(Knife, "Tool: Knife")
@@ -64,5 +70,9 @@ REGISTER_COMPONENT(Ingre_CrushedFlower, "Ingredient: Flower (CRUSHED)")
 REGISTER_COMPONENT(Ingre_Mushroom, "Ingredient: Mushroom (RAW)")
 REGISTER_COMPONENT(Ingre_CutMushroom, "Ingredient: Mushroom (CUT)")
 REGISTER_COMPONENT(Ingre_CrushedMushroom, "Ingredient: Mushroom (CRUSHED)")
+
+// --- POTIONS & FIELDS REGISTRATION ---
+REGISTER_COMPONENT(Potion_dmg, "Potion: Damage")
+REGISTER_COMPONENT(Field_dmg, "Field: Damage")
 
 COMPONENT_MODULE_END()

@@ -4,13 +4,13 @@
     "\\Sources",
     "\\Sources\\GameAssembly",
     "\\Sources\\GameAssembly\\WH",
-    "\\Sources\\GameAssembly\\WH\\Ingredients",
-    "\\Sources\\GameAssembly\\WH\\Tools",
+    "\\Sources\\GameAssembly\\WH\\Potions",
+    "\\Sources\\GameAssembly\\WH\\Potions\\FIelds",
     "\\Sources\\Termina",
     "\\Sources\\Termina\\Physics",
     "\\Sources\\Termina\\Physics\\Components",
     "\\Sources\\Termina\\World"
   ],
-  "SelectedNode": "\\Sources\\GameAssembly\\WH\\Ingredients\\Ingre_CutFlower.hpp",
+  "SelectedNode": "\\Sources\\GameAssembly\\WH\\Potions\\Potion_dmg.cpp",
   "PreviewInSolutionExplorer": false
 }

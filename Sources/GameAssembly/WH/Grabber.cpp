@@ -1,11 +1,13 @@
 #include "Grabber.hpp"
 #include "Grabbable.hpp"
 #include "ChoppingBlock.hpp" 
+#include "CauldronBlock.hpp" // <-- ADDED THIS INCLUDE
 #include <Termina/Physics/Components/Rigidbody.hpp>
 #include <Termina/World/Components/Transform.hpp>
 #include <Termina/Core/Logger.hpp>
 #include <Termina/Core/Application.hpp>
 #include <Termina/Physics/PhysicsSystem.hpp>
+#include "GameAssembly/WH/Potions/Potion_dmg.hpp"
 
 using namespace TerminaScript;
 
@@ -37,7 +39,6 @@ void Grabber::Update(float deltaTime)
     // 1. Determine what we are looking at
     // ==========================================
     uint64 currentHitID = 0;
-    // Part 1: Determine what we are looking at
     if (hit.Hit && hit.HitActor != nullptr) {
         if (m_HeldItemID != 0 && hit.HitActor->GetID() == m_HeldItemID) {
             currentHitID = m_HoveredItemID;
@@ -45,7 +46,6 @@ void Grabber::Update(float deltaTime)
         else if (hit.HitActor->HasComponent<Grabbable>()) {
             currentHitID = hit.HitActor->GetID();
         }
-        // NEW LOGIC: Ask the board for its item
         else if (hit.HitActor->HasComponent<ChoppingBlock>()) {
             auto& board = hit.HitActor->GetComponent<ChoppingBlock>();
             Termina::Actor* itemOnBoard = board.GetSlottedItem();
@@ -62,9 +62,6 @@ void Grabber::Update(float deltaTime)
     {
         Termina::Actor* oldHover = GetHoveredItem();
 
-        // FIX FOR THE DELAYED CRASH: 
-        // Ensure oldHover isn't corrupted, dangling memory before touching its scale.
-        // We do this by checking if the ID matches and if it actually has a transform.
         if (oldHover != nullptr && oldHover->GetID() == m_HoveredItemID && m_HoveredItemID != m_HeldItemID)
         {
             if (oldHover->HasComponent<Termina::Transform>())
@@ -89,23 +86,83 @@ void Grabber::Update(float deltaTime)
     }
 
     // ==========================================
-        // 3. INPUT: Grab or Throw
-        // ==========================================
+    // 3. INPUT: Grab or Throw
+    // ==========================================
     if (Input::IsMouseButtonPressed(Termina::MouseButton::Left))
     {
         Termina::Actor* heldItem = GetHeldItem();
         Termina::Actor* hoveredItem = GetHoveredItem();
 
+        // ==========================================================
+        // NEW CAULDRON EXTRACTION LOGIC
+        // If we click the intake box with an empty hand, pull an item out!
+        // ==========================================================
+        if (heldItem == nullptr && hit.Hit && hit.HitActor != nullptr && hit.HitActor->GetName() == "cauldron_IntakeBox")
+        {
+            Termina::Actor* cauldronActor = nullptr;
+
+            // Find the actor that actually has the CauldronBlock component
+            for (const auto& actorPtr : world->GetActors()) {
+                if (actorPtr->HasComponent<CauldronBlock>()) {
+                    cauldronActor = actorPtr.get();
+                    break;
+                }
+            }
+
+            if (cauldronActor) {
+                auto& cauldron = cauldronActor->GetComponent<CauldronBlock>();
+                Termina::Actor* poppedItem = cauldron.PopLastIngredient();
+
+                if (poppedItem) {
+                    // Force the script to hold the item we just popped
+                    m_HeldItemID = poppedItem->GetID();
+                    heldItem = poppedItem;
+
+                    // Clear the hover state so it doesn't get confused
+                    m_HoveredItemID = 0;
+                    m_OriginalScale = glm::vec3(1.0f); // Cauldron PopLastIngredient resets scale to 1.0f
+
+                    // Make it Kinematic so it doesn't fall through the floor
+                    if (heldItem->HasComponent<Termina::Rigidbody>()) {
+                        auto& rb = heldItem->GetComponent<Termina::Rigidbody>();
+                        rb.Type = Termina::Rigidbody::BodyType::Kinematic;
+                        rb.SetLinearVelocity(glm::vec3(0.0f));
+                    }
+
+                    // Attach to player's hand
+                    Termina::Actor* handTarget = world->GetActorByName("GrabbedPos");
+                    if (handTarget != nullptr) {
+                        if (heldItem->GetParent() != nullptr) {
+                            heldItem->DetachFromParent();
+                        }
+                        handTarget->AttachChild(heldItem);
+
+                        auto& itemTr = heldItem->GetComponent<Termina::Transform>();
+                        auto& handTr = handTarget->GetComponent<Termina::Transform>();
+                        itemTr.SetPosition(handTr.GetPosition());
+                        itemTr.SetRotation(handTr.GetRotation());
+
+                        TN_INFO("Item GRABBED from Cauldron!");
+                    }
+
+                    // Return early so we don't accidentally trigger the normal grab logic
+                    return;
+                }
+            }
+        }
+        // ==========================================================
+        // END OF CAULDRON EXTRACTION LOGIC
+        // ==========================================================
+
+        // Original Grab Logic
         if (heldItem == nullptr && hoveredItem != nullptr)
         {
             m_HeldItemID = m_HoveredItemID;
             heldItem = hoveredItem;
 
-            // Define the transform for the item we just picked up
             auto& itemTr = heldItem->GetComponent<Termina::Transform>();
-            itemTr.SetScale(m_OriginalScale); // Reset scale from the hover effect
+            itemTr.SetScale(m_OriginalScale);
 
-            // Handle Physics: Change to Kinematic so it follows the hand perfectly
             if (heldItem->HasComponent<Termina::Rigidbody>())
             {
                 auto& rb = heldItem->GetComponent<Termina::Rigidbody>();
@@ -113,8 +170,6 @@ void Grabber::Update(float deltaTime)
                 rb.SetLinearVelocity(glm::vec3(0.0f));
             }
 
-            // BOARD SAFETY: If we took it from a chopping block, tell the block it's empty!
-            // Path: Item -> itemPos -> ChoppingBlock
             if (heldItem->GetParent() && heldItem->GetParent()->GetParent()) {
                 auto* boardActor = heldItem->GetParent()->GetParent();
                 if (boardActor->HasComponent<ChoppingBlock>()) {
@@ -122,11 +177,9 @@ void Grabber::Update(float deltaTime)
                 }
             }
 
-            // ATTACH TO HAND
             Termina::Actor* handTarget = world->GetActorByName("GrabbedPos");
             if (handTarget != nullptr)
             {
-                // THE ORPHAN GUARD: Only detach if it actually has a parent
                 if (heldItem->GetParent() != nullptr)
                 {
                     heldItem->DetachFromParent();
@@ -134,7 +187,6 @@ void Grabber::Update(float deltaTime)
 
                 handTarget->AttachChild(heldItem);
 
-                // Snap to the hand's position and rotation
                 auto& handTr = handTarget->GetComponent<Termina::Transform>();
                 itemTr.SetPosition(handTr.GetPosition());
                 itemTr.SetRotation(handTr.GetRotation());
@@ -142,9 +194,14 @@ void Grabber::Update(float deltaTime)
                 TN_INFO("Item GRABBED!");
             }
         }
+        // Original Throw Logic
         else if (heldItem != nullptr)
         {
-            // ... (Your existing THROW logic remains the same)
+            // --- NEW: ARM THE POTION ---
+            if (heldItem->HasComponent<Potion_dmg>()) {
+                heldItem->GetComponent<Potion_dmg>().SetThrown(true);
+            }
+
             if (heldItem->HasComponent<Termina::Rigidbody>())
             {
                 auto& rb = heldItem->GetComponent<Termina::Rigidbody>();
