@@ -6,6 +6,7 @@
 #include "ParticleSystem.hpp"
 #include "PhysicsTestComponent.hpp"
 #include "WH/PlayerController.hpp"
+#include "WH/Entities/DayNightCycle.hpp"
 #include "WH/PlayerHealth.hpp"
 
 // --- STATIONS ---
