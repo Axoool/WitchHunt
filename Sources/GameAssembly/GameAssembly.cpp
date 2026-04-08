@@ -8,7 +8,7 @@
 
 //
 #include "WH/Entities/SpawnerComponent.hpp"
-
+#include "WH/Entities/DayNightCycle.hpp"
 #include "WH/Entities/Grabber.hpp"
 #include "WH/Entities/Grabbable.hpp"
 
@@ -31,4 +31,5 @@ REGISTER_COMPONENT(SpawnerComponent, "Spawner Component")
 
 REGISTER_COMPONENT(Grabber, "Grabber")
 REGISTER_COMPONENT(Grabbable, "Grabbable")
+REGISTER_COMPONENT(DayNightCycle, "DayNightCycle")
 COMPONENT_MODULE_END()
