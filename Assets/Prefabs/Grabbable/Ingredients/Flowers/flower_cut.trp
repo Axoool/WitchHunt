@@ -8,7 +8,7 @@
                     "data": {
                         "position": [
                             0.0,
-                            -0.04772309958934784,
+                            0.0,
                             0.0
                         ],
                         "rotation": [
@@ -78,7 +78,7 @@
                 {
                     "active": true,
                     "data": {},
-                    "type": "Ingredient"
+                    "type": "Ingredient: Flower (CUT)"
                 }
             ],
             "id": "9720734711774210598",

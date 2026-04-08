@@ -7,9 +7,9 @@
                     "active": true,
                     "data": {
                         "position": [
-                            2.7772536277770996,
-                            0.10392174124717712,
-                            -0.7625253200531006
+                            0.0,
+                            0.0,
+                            0.0
                         ],
                         "rotation": [
                             1.0,
@@ -78,7 +78,7 @@
                 {
                     "active": true,
                     "data": {},
-                    "type": "Ingredient: Mushroom"
+                    "type": "Ingredient: Mushroom (RAW)"
                 }
             ],
             "id": "18102236742840033813",

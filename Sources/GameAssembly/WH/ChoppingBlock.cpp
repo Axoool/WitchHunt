@@ -1,5 +1,6 @@
 #include "ChoppingBlock.hpp"
 #include "GameAssembly/WH/Ingredients/Ingre_Flower.hpp"
+#include "GameAssembly/WH/Ingredients/Ingre_Mushroom.hpp" // Included Mushroom
 #include "GameAssembly/WH/Tools/Knife.hpp"
 #include <Termina/World/World.hpp>
 #include <Termina/Physics/Components/Rigidbody.hpp>
@@ -11,10 +12,10 @@ namespace TerminaScript {
 
     void ChoppingBlock::OnUpdate(float deltaTime) {
         auto* world = m_Owner->GetParentWorld();
-        Termina::Actor* itemPos = world->GetActorByName("chopping_itemPos");
-        if (!itemPos) return;
 
-        glm::vec3 targetPos = itemPos->GetComponent<Termina::Transform>().GetPosition();
+        Termina::Actor* itemPos = world->GetActorByName("chopping_itemPos");
+        Termina::Actor* intakeBox = world->GetActorByName("chopping_IntakeBox");
+        if (!itemPos || !intakeBox) return;
 
         // --- PART A: SLOT MAINTENANCE ---
         if (m_SlottedItemID != 0) {
@@ -24,31 +25,35 @@ namespace TerminaScript {
             }
         }
 
-        // --- PART B: THE SENSORS (Proximity Check) ---
-        // FIX: world->GetActors() returns shared_ptr. Use .get() to get the raw pointer.
+        glm::vec3 hitboxPos = intakeBox->GetComponent<Termina::Transform>().GetPosition();
+
+        // --- PART B: THE SENSORS (Impact Check) ---
         for (const auto& actorPtr : world->GetActors()) {
-            Termina::Actor* actor = actorPtr.get(); // Access the actual Actor pointer
+            Termina::Actor* actor = actorPtr.get();
 
             if (!actor || actor == m_Owner) continue;
 
-            float dist = glm::distance(actor->GetComponent<Termina::Transform>().GetPosition(), targetPos);
+            if (IsPlayerHolding(actor)) continue;
 
-            // 1. KNIFE SENSOR: If a knife gets close and we have an item, CHOP!
-            if (dist < 0.7f && actor->HasComponent<Knife>() && m_SlottedItemID != 0) {
+            glm::vec3 actorPos = actor->GetComponent<Termina::Transform>().GetPosition();
+            float distToHitbox = glm::length(actorPos - hitboxPos);
+
+            // 1. KNIFE SENSOR (Reduced range from 1.0f to 0.4f for tighter, realistic cutting)
+            if (distToHitbox < 0.4f && actor->HasComponent<Knife>() && m_SlottedItemID != 0) {
                 PerformChop(actor);
                 break;
             }
 
-            // 2. INGREDIENT SENSOR: Catching the throw
-            if (m_SlottedItemID == 0 && dist < 0.5f) {
-                if (IsRawIngredient(actor) && !IsPlayerHolding(actor)) {
+            // 2. INGREDIENT SENSOR
+            if (m_SlottedItemID == 0 && distToHitbox < 0.8f) {
+                if (IsRawIngredient(actor)) {
                     m_SlottedItemID = actor->GetID();
 
                     actor->DetachFromParent();
                     itemPos->AttachChild(actor);
 
                     auto& tr = actor->GetComponent<Termina::Transform>();
-                    tr.SetPosition(targetPos);
+                    tr.SetPosition(itemPos->GetComponent<Termina::Transform>().GetPosition());
                     tr.SetRotation(itemPos->GetComponent<Termina::Transform>().GetRotation());
 
                     if (actor->HasComponent<Termina::Rigidbody>()) {
@@ -56,7 +61,7 @@ namespace TerminaScript {
                         rb.Type = Termina::Rigidbody::BodyType::Static;
                         rb.SetLinearVelocity(glm::vec3(0));
                     }
-                    TN_INFO("Board: Caught flying ingredient!");
+                    TN_INFO("Board: Item hit the block and docked!");
                     break;
                 }
             }
@@ -71,24 +76,61 @@ namespace TerminaScript {
         if (prefabPath.empty()) return;
 
         auto* world = m_Owner->GetParentWorld();
+
+        // 1. Spawn the new Cut Item
         Termina::Actor* cutItem = world->SpawnActorFromJSON(prefabPath);
 
         if (cutItem) {
             auto& cutTr = cutItem->GetComponent<Termina::Transform>();
-            cutTr.SetPosition(rawItem->GetComponent<Termina::Transform>().GetPosition() + glm::vec3(0, 0.3f, 0));
+            Termina::Actor* resultPos = world->GetActorByName("chopping_resultPos");
+
+            // Teleport to the result area if it exists
+            if (resultPos) {
+                cutTr.SetPosition(resultPos->GetComponent<Termina::Transform>().GetPosition());
+                cutTr.SetRotation(resultPos->GetComponent<Termina::Transform>().GetRotation());
+            }
+            else {
+                // Fallback just in case
+                cutTr.SetPosition(rawItem->GetComponent<Termina::Transform>().GetPosition() + glm::vec3(0, 0.3f, 0));
+            }
 
             if (cutItem->HasComponent<Termina::Rigidbody>()) {
                 auto& rb = cutItem->GetComponent<Termina::Rigidbody>();
                 rb.Type = Termina::Rigidbody::BodyType::Dynamic;
-                rb.SetLinearVelocity(glm::vec3(0, 4.0f, 2.0f));
+                rb.SetLinearVelocity(glm::vec3(0, 2.0f, 1.0f)); // Slightly reduced pop-out velocity
             }
         }
 
+        // --- THE "GRAVEYARD" DOCKING HACK ---
         m_SlottedItemID = 0;
-        rawItem->DetachFromParent();
-        rawItem->GetComponent<Termina::Transform>().SetPosition(glm::vec3(0, -9999, 0));
-        world->DestroyActor(rawItem);
-        TN_INFO("Board: Item Chopped!");
+
+        Termina::Actor* hidePos = world->GetActorByName("hide_Pos");
+        if (hidePos) {
+            rawItem->DetachFromParent();
+            hidePos->AttachChild(rawItem);
+
+            auto& tr = rawItem->GetComponent<Termina::Transform>();
+            tr.SetPosition(hidePos->GetComponent<Termina::Transform>().GetPosition());
+            tr.SetRotation(hidePos->GetComponent<Termina::Transform>().GetRotation());
+
+            if (rawItem->HasComponent<Termina::Rigidbody>()) {
+                auto& rb = rawItem->GetComponent<Termina::Rigidbody>();
+                rb.SetLinearVelocity(glm::vec3(0.0f));
+            }
+
+            auto children = rawItem->GetChildren();
+            for (const auto& child : children) {
+                if (child && child->HasComponent<Termina::Rigidbody>()) {
+                    auto& childRb = child->GetComponent<Termina::Rigidbody>();
+                    childRb.SetLinearVelocity(glm::vec3(0.0f));
+                }
+            }
+
+            TN_INFO("Board: Item Chopped! Old item successfully docked to hide_Pos.");
+        }
+        else {
+            TN_ERROR("Board: hide_Pos not found! Make sure it is named exactly 'hide_Pos' in the world.");
+        }
     }
 
     Termina::Actor* ChoppingBlock::GetSlottedItem() const {
@@ -108,9 +150,13 @@ namespace TerminaScript {
 
     bool ChoppingBlock::IsRawIngredient(Termina::Actor* actor) {
         if (!actor) return false;
-        if (actor->HasComponent<Ingre_Flower>()) {
-            return actor->GetComponent<Ingre_Flower>().CurrentState == Ingre_Flower::State::Unprocessed;
-        }
+
+        // We completely removed the Enum states! 
+        // Now, just having the base Ingre_Flower or Ingre_Mushroom component 
+        // means it IS the raw, uncut version.
+        if (actor->HasComponent<Ingre_Flower>()) return true;
+        if (actor->HasComponent<Ingre_Mushroom>()) return true;
+
         return false;
     }
 
@@ -122,9 +168,15 @@ namespace TerminaScript {
 
     std::string ChoppingBlock::GetCutPrefabPath(Termina::Actor* actor) {
         if (!actor) return "";
+
         if (actor->HasComponent<Ingre_Flower>()) {
             return actor->GetComponent<Ingre_Flower>().CutPrefabName;
         }
+
+        if (actor->HasComponent<Ingre_Mushroom>()) {
+            return actor->GetComponent<Ingre_Mushroom>().CutPrefabName;
+        }
+
         return "";
     }
 }

@@ -6,18 +6,27 @@
 #include "ParticleSystem.hpp"
 #include "PhysicsTestComponent.hpp"
 
+// --- STATIONS ---
 #include "WH/ChoppingBlock.hpp"
+#include "WH/MortarPestleBlock.hpp"
 
-// --- NEW INGREDIENT HEADERS ---
+// --- INGREDIENTS ---
 #include "WH/Ingredients/Ingre_Flower.hpp"
+#include "WH/Ingredients/Ingre_CutFlower.hpp"
+#include "WH/Ingredients/Ingre_CrushedFlower.hpp"
+
 #include "WH/Ingredients/Ingre_Mushroom.hpp"
+#include "WH/Ingredients/Ingre_CutMushroom.hpp"
+#include "WH/Ingredients/Ingre_CrushedMushroom.hpp"
 
+// --- CORE / UTILS ---
 #include "WH/SpawnerComponent.hpp"
-
 #include "WH/Grabber.hpp"
 #include "WH/Grabbable.hpp"
 
+// --- TOOLS ---
 #include "WH/Tools/Knife.hpp"
+#include "WH/Tools/Pestle.hpp"
 
 // 1. Move the ImGui context setup to the global scope (outside the macro)
 TERMINA_DLL_EXPORT void SetImGuiContext(void* ctx, void* allocFunc, void* freeFunc, void* userData)
@@ -38,11 +47,22 @@ REGISTER_COMPONENT(SpawnerComponent, "Spawner Component")
 
 REGISTER_COMPONENT(Grabber, "Grabber")
 REGISTER_COMPONENT(Grabbable, "Grabbable")
-REGISTER_COMPONENT(ChoppingBlock, "ChoppingBlock Component")
-REGISTER_COMPONENT(Knife, "Tool: Knife")
 
-// --- NEW INGREDIENT REGISTRATIONS ---
-REGISTER_COMPONENT(Ingre_Flower, "Ingredient: Flower")
-REGISTER_COMPONENT(Ingre_Mushroom, "Ingredient: Mushroom")
+// --- STATIONS REGISTRATION ---
+REGISTER_COMPONENT(ChoppingBlock, "ChoppingBlock Component")
+REGISTER_COMPONENT(MortarPestleBlock, "MortarPestleBlock Component")
+
+// --- TOOLS REGISTRATION ---
+REGISTER_COMPONENT(Knife, "Tool: Knife")
+REGISTER_COMPONENT(Pestle, "Tool: Pestle")
+
+// --- INGREDIENTS REGISTRATION ---
+REGISTER_COMPONENT(Ingre_Flower, "Ingredient: Flower (RAW)")
+REGISTER_COMPONENT(Ingre_CutFlower, "Ingredient: Flower (CUT)")
+REGISTER_COMPONENT(Ingre_CrushedFlower, "Ingredient: Flower (CRUSHED)")
+
+REGISTER_COMPONENT(Ingre_Mushroom, "Ingredient: Mushroom (RAW)")
+REGISTER_COMPONENT(Ingre_CutMushroom, "Ingredient: Mushroom (CUT)")
+REGISTER_COMPONENT(Ingre_CrushedMushroom, "Ingredient: Mushroom (CRUSHED)")
 
 COMPONENT_MODULE_END()

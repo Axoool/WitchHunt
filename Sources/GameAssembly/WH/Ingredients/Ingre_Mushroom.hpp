@@ -8,36 +8,25 @@ namespace TerminaScript {
     public:
         Ingre_Mushroom(Termina::Actor* owner) : Termina::Component(owner) {}
 
-        enum class State { Unprocessed, Processed };
-        enum class Method { None, Cut, Crushed };
+        // Set these paths to wherever your mushroom prefabs actually live!
+        std::string CutPrefabName = "Assets\\Prefabs\\Grabbable\\Ingredients\\Mushrooms\\mushroom_cut.trp";
+        std::string CrushPrefabName = "Assets\\Prefabs\\Grabbable\\Ingredients\\Mushrooms\\mushroom_crush.trp";
 
-        State CurrentState = State::Unprocessed;
-        Method ProcessMethod = Method::None;
-
-        // --- FIX: Hardcoded default path! ---
-        std::string CutPrefabName = "Assets\\Prefabs\\Grabbable\\Ingredients\\Mushrooms\\mushroom_cut.trp"; // Update this path!
-
-        Termina::UpdateFlags GetUpdateFlags() const override {
-            return static_cast<Termina::UpdateFlags>(0);
-        }
+        Termina::UpdateFlags GetUpdateFlags() const override { return static_cast<Termina::UpdateFlags>(0); }
 
         void Inspect() override {
-            const char* states[] = { "Unprocessed", "Processed" };
-            int currentStateInt = (int)CurrentState;
-            if (ImGui::Combo("Processing State", &currentStateInt, states, IM_ARRAYSIZE(states))) {
-                CurrentState = (State)currentStateInt;
+            ImGui::Text("State: RAW Ingredient");
+
+            char cutBuf[128];
+            strcpy_s(cutBuf, CutPrefabName.c_str());
+            if (ImGui::InputText("Prefab when CUT", cutBuf, sizeof(cutBuf))) {
+                CutPrefabName = cutBuf;
             }
 
-            const char* methods[] = { "None", "Cut", "Crushed" };
-            int currentMethodInt = (int)ProcessMethod;
-            if (ImGui::Combo("Processing Method", &currentMethodInt, methods, IM_ARRAYSIZE(methods))) {
-                ProcessMethod = (Method)currentMethodInt;
-            }
-
-            char buf[128];
-            strcpy_s(buf, CutPrefabName.c_str());
-            if (ImGui::InputText("Prefab when CUT (Knife)", buf, sizeof(buf))) {
-                CutPrefabName = buf;
+            char crushBuf[128];
+            strcpy_s(crushBuf, CrushPrefabName.c_str());
+            if (ImGui::InputText("Prefab when CRUSHED", crushBuf, sizeof(crushBuf))) {
+                CrushPrefabName = crushBuf;
             }
         }
     };
