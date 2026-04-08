@@ -61,8 +61,8 @@
 	"images":[
 		{
 			"mimeType":"image/png",
-			"name":"Sphere Base Color",
-			"uri":"Sphere%20Base%20Color.png"
+			"name":"slime_BaseColour",
+			"uri":"slime_BaseColour.png"
 		}
 	],
 	"accessors":[
