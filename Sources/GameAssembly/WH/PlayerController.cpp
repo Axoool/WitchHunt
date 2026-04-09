@@ -11,8 +11,8 @@ void PlayerController::Update(float deltaTime)
 {
     if (Input::IsKeyPressed(Termina::Key::Escape))
     {
-        Input::SetCursorLocked(false);
-        Input::SetCursorVisible(true);
+        TerminaScript::Input::SetCursorVisible(true);
+        TerminaScript::Input::SetCursorLocked(false);
     }
 
     glm::vec2 mouseDelta = Input::GetMouseDelta();
@@ -91,8 +91,8 @@ void PlayerController::Update(float deltaTime)
 
 void PlayerController::Start()
 {
-    Input::SetCursorLocked(true);
-    Input::SetCursorVisible(false);
+    TerminaScript::Input::SetCursorVisible(false);
+    TerminaScript::Input::SetCursorLocked(true);
 }
 
 void PlayerController::Serialize(nlohmann::json& out) const

@@ -6,6 +6,7 @@
 #include "ParticleSystem.hpp"
 #include "PhysicsTestComponent.hpp"
 #include "WH/PlayerController.hpp"
+#include "WH/PlayerHealth.hpp"
 
 // --- STATIONS ---
 #include "WH/ChoppingBlock.hpp"
@@ -52,10 +53,11 @@ REGISTER_COMPONENT(FlyCamComponent, "Fly Cam Component")
 REGISTER_COMPONENT(ParticleSystemComponent, "Particle System")
 REGISTER_COMPONENT(PhysicsTestComponent, "Physics Test")
 REGISTER_COMPONENT(SpawnerComponent, "Spawner Component")
+REGISTER_COMPONENT(PlayerHealth, "Player Health")
 
 REGISTER_COMPONENT(Grabber, "Grabber")
 REGISTER_COMPONENT(Grabbable, "Grabbable")
-REGISTER_COMPONENT(Ground, "Ground") // <-- Added Ground Registration
+REGISTER_COMPONENT(Ground, "Ground")
 
 // --- STATIONS REGISTRATION ---
 REGISTER_COMPONENT(ChoppingBlock, "ChoppingBlock Component")
