@@ -66,12 +66,17 @@
                         "is_sensor": false,
                         "linear_damping": 0.05000000074505806,
                         "mass": 1.0,
-                        "type": 0
+                        "type": 1
                     },
                     "type": "Rigidbody"
+                },
+                {
+                    "active": true,
+                    "data": {},
+                    "type": "Mob Component"
                 }
             ],
-            "id": "10810583013846151404",
+            "id": "8521306942712761769",
             "name": "Slime",
             "parentId": null
         },
@@ -108,9 +113,9 @@
                     "type": "Mesh Component"
                 }
             ],
-            "id": "16446768279277366223",
+            "id": "8530496623337610439",
             "name": "slime_mesh",
-            "parentId": "10810583013846151404"
+            "parentId": "8521306942712761769"
         }
     ],
     "version": 1

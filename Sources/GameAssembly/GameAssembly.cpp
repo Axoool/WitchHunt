@@ -5,6 +5,7 @@
 #include "FlyCamComponent.hpp"
 #include "ParticleSystem.hpp"
 #include "PhysicsTestComponent.hpp"
+#include "MobComponent.hpp"
 #include "WH/PlayerController.hpp"
 #include "WH/PlayerHealth.hpp"
 
@@ -54,6 +55,7 @@ REGISTER_COMPONENT(ParticleSystemComponent, "Particle System")
 REGISTER_COMPONENT(PhysicsTestComponent, "Physics Test")
 REGISTER_COMPONENT(SpawnerComponent, "Spawner Component")
 REGISTER_COMPONENT(PlayerHealth, "Player Health")
+REGISTER_COMPONENT(MobComponent, "Mob Component")
 
 REGISTER_COMPONENT(Grabber, "Grabber")
 REGISTER_COMPONENT(Grabbable, "Grabbable")
