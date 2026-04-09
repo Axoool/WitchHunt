@@ -1,6 +1,6 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.5.47",
+		"generator":"Khronos glTF Blender I/O v5.1.18",
 		"version":"2.0"
 	},
 	"scene":0,
@@ -56,18 +56,18 @@
 	"images":[
 		{
 			"mimeType":"image/png",
-			"name":"field_dmg_BaseColour",
-			"uri":"field_dmg_BaseColour.png"
+			"name":"Crosshair_BaseColour",
+			"uri":"Crosshair_BaseColour.png"
 		}
 	],
 	"accessors":[
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":2240,
+			"count":192,
 			"max":[
 				1,
-				0.29675373435020447,
+				0.054008133709430695,
 				1
 			],
 			"min":[
@@ -80,45 +80,45 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":2240,
+			"count":192,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":2240,
+			"count":192,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":3348,
+			"count":372,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":26880,
+			"byteLength":2304,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":26880,
-			"byteOffset":26880,
+			"byteLength":2304,
+			"byteOffset":2304,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":17920,
-			"byteOffset":53760,
+			"byteLength":1536,
+			"byteOffset":4608,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":6696,
-			"byteOffset":71680,
+			"byteLength":744,
+			"byteOffset":6144,
 			"target":34963
 		}
 	],
@@ -130,8 +130,8 @@
 	],
 	"buffers":[
 		{
-			"byteLength":78376,
-			"uri":"field_dmg.bin"
+			"byteLength":6888,
+			"uri":"crosshair.bin"
 		}
 	]
 }

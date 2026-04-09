@@ -8,7 +8,7 @@
                     "data": {
                         "position": [
                             0.0,
-                            -0.14236509799957275,
+                            0.0,
                             0.0
                         ],
                         "rotation": [
@@ -76,7 +76,7 @@
                     "type": "Field: Damage"
                 }
             ],
-            "id": "4931380326932107114",
+            "id": "728118375080231476",
             "name": "field_dmg",
             "parentId": null
         },
@@ -88,19 +88,19 @@
                     "data": {
                         "position": [
                             0.0,
-                            0.0,
-                            0.0
+                            -0.08874006569385529,
+                            0.013056397438049316
                         ],
                         "rotation": [
                             1.0,
-                            -0.0,
-                            -0.0,
-                            -0.0
+                            0.0,
+                            0.0,
+                            0.0
                         ],
                         "scale": [
-                            1.0,
-                            1.0,
-                            1.0
+                            4.0,
+                            4.0,
+                            4.0
                         ]
                     },
                     "type": "Transform"
@@ -108,14 +108,14 @@
                 {
                     "active": true,
                     "data": {
-                        "model": "Assets\\Models\\Potions\\Fields\\DMG\\field_dmg.gltf"
+                        "model": "Assets\\Models\\Potions\\Fields\\DMG\\damage_potion.gltf"
                     },
                     "type": "Mesh Component"
                 }
             ],
-            "id": "4158711006120255645",
+            "id": "11471817519337318378",
             "name": "field_dmg_mesh",
-            "parentId": "4931380326932107114"
+            "parentId": "728118375080231476"
         }
     ],
     "version": 1
