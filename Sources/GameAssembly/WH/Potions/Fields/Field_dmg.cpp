@@ -6,6 +6,10 @@
 
 namespace TerminaScript {
     void Field_dmg::OnUpdate(float deltaTime) {
+        // --- NEW: THE DEAD TRAP ---
+        // If we are expired (-1.0f), exit immediately so it doesn't count back up!
+        if (m_Lifetime < 0.0f) return;
+
         m_Lifetime += deltaTime;
 
         // Damage logic for enemies would happen here
@@ -30,7 +34,8 @@ namespace TerminaScript {
                 TN_INFO("Field: Expired and moved to hide_Pos.");
             }
 
-            m_Lifetime = -1.0f; // Stop update logic
+            // Set to negative to trigger the Dead Trap on the next frame
+            m_Lifetime = -1.0f;
         }
     }
 }

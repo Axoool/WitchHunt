@@ -18,6 +18,7 @@ namespace TerminaScript {
         }
 
     private:
+        void Shatter();
         bool m_WasThrown = false;
         float m_ArmTimer = 0.0f; // Prevents it from breaking the exact millisecond it leaves your hand
     };

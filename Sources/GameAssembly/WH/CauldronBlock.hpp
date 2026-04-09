@@ -2,8 +2,22 @@
 #include <Termina/World/Component.hpp>
 #include <vector>
 #include <cstdint>
+#include <string> // Added for the Recipe prefab strings
 
 namespace TerminaScript {
+
+    // --- NEW: Ingredient Enum & Recipe Struct ---
+    enum class IngredientType {
+        None,
+        RawFlower, CutFlower, CrushedFlower,
+        RawMushroom, CutMushroom, CrushedMushroom
+    };
+
+    struct Recipe {
+        std::vector<IngredientType> Inputs;
+        std::string ResultPrefab;
+    };
+
     class CauldronBlock : public Termina::Component {
     public:
         CauldronBlock(Termina::Actor* owner) : Termina::Component(owner) {}
@@ -23,5 +37,10 @@ namespace TerminaScript {
 
         bool IsPlayerHolding(Termina::Actor* actor);
         bool IsAnyIngredient(Termina::Actor* actor);
+
+        // --- NEW: Crafting logic functions ---
+        IngredientType GetIngredientTypeFromActor(Termina::Actor* actor);
+        void CheckRecipes();
+        void CraftPotion(const std::string& prefabPath);
     };
 }

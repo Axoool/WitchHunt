@@ -28,6 +28,7 @@
 #include "WH/SpawnerComponent.hpp"
 #include "WH/Grabber.hpp"
 #include "WH/Grabbable.hpp"
+#include "WH/Environment/Ground.hpp" // <-- Added Ground Include
 
 // --- TOOLS ---
 #include "WH/Tools/Knife.hpp"
@@ -52,6 +53,7 @@ REGISTER_COMPONENT(SpawnerComponent, "Spawner Component")
 
 REGISTER_COMPONENT(Grabber, "Grabber")
 REGISTER_COMPONENT(Grabbable, "Grabbable")
+REGISTER_COMPONENT(Ground, "Ground") // <-- Added Ground Registration
 
 // --- STATIONS REGISTRATION ---
 REGISTER_COMPONENT(ChoppingBlock, "ChoppingBlock Component")
