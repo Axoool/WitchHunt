@@ -2,10 +2,10 @@
 #include <Termina/World/ComponentRegistry.hpp>
 #include <ImGui/imgui.h>
 
-#include "Controller.hpp"
 #include "FlyCamComponent.hpp"
 #include "ParticleSystem.hpp"
 #include "PhysicsTestComponent.hpp"
+#include "WH/PlayerController.hpp"
 
 // --- STATIONS ---
 #include "WH/ChoppingBlock.hpp"
@@ -77,5 +77,5 @@ REGISTER_COMPONENT(Ingre_CrushedMushroom, "Ingredient: Mushroom (CRUSHED)")
 // --- POTIONS & FIELDS REGISTRATION ---
 REGISTER_COMPONENT(Potion_dmg, "Potion: Damage")
 REGISTER_COMPONENT(Field_dmg, "Field: Damage")
-REGISTER_COMPONENT(Controller, "Controller")
+REGISTER_COMPONENT(PlayerController, "Player Controller")
 COMPONENT_MODULE_END()
