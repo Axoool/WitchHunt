@@ -47,6 +47,7 @@ TERMINA_DLL_EXPORT void SetImGuiContext(void* ctx, void* allocFunc, void* freeFu
 
 // 2. Keep the component registration tightly inside the macros
 COMPONENT_MODULE_BEGIN()
+REGISTER_COMPONENT(PlayerController, "Player Controller")
 REGISTER_COMPONENT(FlyCamComponent, "Fly Cam Component")
 REGISTER_COMPONENT(ParticleSystemComponent, "Particle System")
 REGISTER_COMPONENT(PhysicsTestComponent, "Physics Test")
@@ -77,5 +78,5 @@ REGISTER_COMPONENT(Ingre_CrushedMushroom, "Ingredient: Mushroom (CRUSHED)")
 // --- POTIONS & FIELDS REGISTRATION ---
 REGISTER_COMPONENT(Potion_dmg, "Potion: Damage")
 REGISTER_COMPONENT(Field_dmg, "Field: Damage")
-REGISTER_COMPONENT(PlayerController, "Player Controller")
+
 COMPONENT_MODULE_END()
