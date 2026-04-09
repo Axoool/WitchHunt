@@ -4,6 +4,7 @@
 #include "CauldronBlock.hpp" // <-- ADDED THIS INCLUDE
 #include <Termina/Physics/Components/Rigidbody.hpp>
 #include <Termina/World/Components/Transform.hpp>
+#include <Termina/Renderer/Components/CameraComponent.hpp>
 #include <Termina/Core/Logger.hpp>
 #include <Termina/Core/Application.hpp>
 #include <Termina/Physics/PhysicsSystem.hpp>
@@ -24,9 +25,17 @@ Termina::Actor* Grabber::GetHeldItem() const {
 void Grabber::Update(float deltaTime)
 {
     auto* physics = Termina::Application::GetSystem<Termina::PhysicsSystem>();
-    auto& cameraTr = m_Owner->GetComponent<Termina::Transform>();
+    Termina::Transform cameraTr;
     Termina::World* world = m_Owner->GetParentWorld();
-
+    auto children = m_Owner->GetChildren();
+    for (Termina::Actor* child : children)
+    {
+        if (child->HasComponent<Termina::CameraComponent>())
+        {
+			cameraTr = child->GetComponent<Termina::Transform>();
+            break;
+        }
+    }
     Termina::Ray reachRay;
     reachRay.Origin = cameraTr.GetPosition();
     glm::vec3 trueForward = cameraTr.GetRotation() * glm::vec3(0.0f, 0.0f, -1.0f);
