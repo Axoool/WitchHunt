@@ -1,53 +1,45 @@
-# TERMINA ENGINE : 1 WEEK TO MAKE IT HAPPEN
+# Projet Jeu Libre
 
-![](.github/image.png)
+## Witch Hunt!
 
-Termina is a game engine made in about a week (screenshot shows engine state deadline of March 16th 2026).
-Other features will be pushed depending on demand from the students using it.
+### Introduction
+- Titre du jeu : *Witch Hunt!*
+- Genre : Simulation / Resource Management / 3d
+- Plateforme : PC
+- Contrôles : Clavier Souris
+- Mécanique principale : Créations de potions similaire à un jeu de simulation de cuisine.
+- Direction artistique / Histoire : Fantaisie médiévale et magique.
+- Moteur / Langage : Termina Engine, C++
 
-## Features made in 5 days
+### Description : 
+Le joueur incane une sorcière pourchassée par une tribu de slimes guerriers. La sorcière dispose d'un campement où elle cherchera des ressources pour créer des potions qui affecteront elle mais aussi
+les ennemis.
 
-- Vulkan/Metal rendering
-- macOS/Windows/Linux support
-- Audio system with spatialization
-- Input system (keyboard, mouse, gamepad)
-- C++ scripting with hot-reload
-- Automatic shader hot reload
-- Actor model and world serialization/deserialization
-- Asset system with ref-counting
-- Fully fledged editor, launcher, and project system
-- Physics system
-- Physically based BRDF
-- Point/Spot/Directional lights
-- Deferred shading
-- CPU frustum culling
-- Raytraced shadows
-- Procedural sky
-- FXAA
-- Debug renderer
-- HDR rendering
+## Contrôles :
+### Clavier Souris :
+- ZQSD, Déplacements
+- Souris : Permet d'attraper les ingrédients, potions et de tourner la caméra
 
-## Building
+## Mécaniques :
+- Les potions ont chacunes des recettes attribuées faisables en coupant ou en écrasant deux ingrédients principaux : Les champignons et les fleurs
+- Tout objet dans le jeu se jette, les potions ont un effet sur le joueur et les ennemis.
 
-```
-xmake
-xmake run Editor
-```
+  
+## Objectifs Techniques
+- Implémentation d’un système de collision entre le joueur, le sol et les obstacles.
+- Utilisation d'un moteur customisé (Termina)
+- Création de scripts acteurs qui impactent la scène
+- Gestion du mouvement du joueur
+- Gestion de l'IA des ennemis
+- Système de création de potions utilisant des ingrédients différents
+- Organisation du projet via Visual Studio et GitHub pour le travail collaboratif.
 
-woaw!
+## Moteur de jeu :
+Termina Engine, scriptant avec C++ sur Visual Studio 2022/2026.
 
-## Dependencies
 
-- cgltf
-- DirectX Shader Compiler
-- glfw
-- GLM
-- ImGui
-- Jolt
-- nlohmann/json
-- Metal Shader Converter
-- MikkTSpace
-- miniaudio
-- stb_image
-- Vulkan Memory Allocator
-- Volk
+## Améliorations Futures
+- Menu principal et options de personnalisation.
+- Plus de potions
+- Implémentation d'UI
+- Optimisation de la génération procédurale, des vagues d'ennemis et le troubleshooting de bugs
