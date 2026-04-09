@@ -1,6 +1,6 @@
 {
 	"asset":{
-		"generator":"Khronos glTF Blender I/O v4.5.47",
+		"generator":"Khronos glTF Blender I/O v5.1.18",
 		"version":"2.0"
 	},
 	"scene":0,
@@ -141,7 +141,7 @@
 	"buffers":[
 		{
 			"byteLength":15092,
-			"uri":"stapotion.bin"
+			"uri":"StaminaPotion.bin"
 		}
 	]
 }
