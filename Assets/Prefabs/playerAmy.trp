@@ -1,0 +1,154 @@
+{
+    "actors": [
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            0.0,
+                            1.201806902885437,
+                            4.084272861480713
+                        ],
+                        "rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Transform"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "far": 1000.0,
+                        "fov": 75.0,
+                        "near": 0.009999999776482582,
+                        "primary": true
+                    },
+                    "type": "Camera Component"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "acceleration": 20.0,
+                        "fastMultiplier": 4.0,
+                        "moveSpeed": 5.0,
+                        "pitch": 0.0,
+                        "sensitivity": 0.15000000596046448,
+                        "velocity": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "wasRotating": false,
+                        "yaw": 0.0
+                    },
+                    "type": "Fly Cam Component"
+                },
+                {
+                    "active": true,
+                    "data": {},
+                    "type": "Grabber"
+                }
+            ],
+            "id": "10911425777978981894",
+            "name": "playerAmy",
+            "parentId": null
+        },
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            0.0,
+                            -0.3293880224227905,
+                            0.0
+                        ],
+                        "rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Transform"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "half_height": 0.5,
+                        "offset": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "radius": 0.25,
+                        "rot_off": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Capsule Collider"
+                }
+            ],
+            "id": "5373795309589997013",
+            "name": "hitboxc",
+            "parentId": "10911425777978981894"
+        },
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            0.4014723300933838,
+                            0.0,
+                            -0.4585108757019043
+                        ],
+                        "rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "scale": [
+                            0.019999999552965164,
+                            0.019999999552965164,
+                            0.019999999552965164
+                        ]
+                    },
+                    "type": "Transform"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "model": ""
+                    },
+                    "type": "Mesh Component"
+                }
+            ],
+            "id": "11926363882848901266",
+            "name": "GrabbedPos",
+            "parentId": "10911425777978981894"
+        }
+    ],
+    "version": 1
+}

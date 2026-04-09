@@ -1,0 +1,118 @@
+{
+    "actors": [
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            0.0,
+                            1.75,
+                            0.0
+                        ],
+                        "rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Transform"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "half_height": 0.5,
+                        "offset": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "radius": 0.25,
+                        "rot_off": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Capsule Collider"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "height": 1.7999999523162842,
+                        "mass": 70.0,
+                        "max_slope_angle": 50.0,
+                        "max_strength": 100.0,
+                        "radius": 0.3499999940395355
+                    },
+                    "type": "Character Controller"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "jumpPower": 5.0,
+                        "maxStamina": 100.0,
+                        "sprintSpeed": 10.0,
+                        "stamina": 100.0,
+                        "staminaDrain": 30.0,
+                        "staminaRegen": 15.0,
+                        "walkSpeed": 5.0
+                    },
+                    "type": "Player Controller"
+                }
+            ],
+            "id": "8065923614715843814",
+            "name": "Player",
+            "parentId": null
+        },
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            0.0,
+                            0.35575592517852783,
+                            0.0
+                        ],
+                        "rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Transform"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "far": 1000.0,
+                        "fov": 75.0,
+                        "near": 0.009999999776482582,
+                        "primary": true
+                    },
+                    "type": "Camera Component"
+                }
+            ],
+            "id": "16478765813442488783",
+            "name": "Camera",
+            "parentId": "8065923614715843814"
+        }
+    ],
+    "version": 1
+}

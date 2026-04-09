@@ -1,0 +1,161 @@
+{
+    "actors": [
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            -5.696218967437744,
+                            0.7017406821250916,
+                            -3.0731217861175537
+                        ],
+                        "rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Transform"
+                },
+                {
+                    "active": true,
+                    "data": {},
+                    "type": "Grabber"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "half_height": 0.30000001192092896,
+                        "offset": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "radius": 0.25,
+                        "rot_off": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Capsule Collider"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "jumpPower": 5.0,
+                        "maxStamina": 100.0,
+                        "sensitivity": 0.15000000596046448,
+                        "sprintSpeed": 10.0,
+                        "stamina": 100.0,
+                        "staminaDrain": 30.0,
+                        "staminaRegen": 15.0,
+                        "walkSpeed": 5.0
+                    },
+                    "type": "Player Controller"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "height": 1.100000023841858,
+                        "mass": 70.0,
+                        "max_slope_angle": 50.0,
+                        "max_strength": 100.0,
+                        "radius": 0.25
+                    },
+                    "type": "Character Controller"
+                }
+            ],
+            "id": "10911425777978981894",
+            "name": "playerAmy",
+            "parentId": null
+        },
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            0.0,
+                            0.304338276386261,
+                            0.0
+                        ],
+                        "rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "scale": [
+                            0.9999998211860657,
+                            0.9999999403953552,
+                            0.9999997019767761
+                        ]
+                    },
+                    "type": "Transform"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "far": 1000.0,
+                        "fov": 75.0,
+                        "near": 0.009999999776482582,
+                        "primary": true
+                    },
+                    "type": "Camera Component"
+                }
+            ],
+            "id": "11179956531814297570",
+            "name": "Camera",
+            "parentId": "10911425777978981894"
+        },
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            0.4013252258300781,
+                            -0.2655046582221985,
+                            -0.8747942447662354
+                        ],
+                        "rotation": [
+                            0.70710688829422,
+                            0.0,
+                            0.7071066498756409,
+                            0.0
+                        ],
+                        "scale": [
+                            0.019998855888843536,
+                            0.020000001415610313,
+                            0.020000001415610313
+                        ]
+                    },
+                    "type": "Transform"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "model": ""
+                    },
+                    "type": "Mesh Component"
+                }
+            ],
+            "id": "11926363882848901266",
+            "name": "GrabbedPos",
+            "parentId": "11179956531814297570"
+        }
+    ],
+    "version": 1
+}

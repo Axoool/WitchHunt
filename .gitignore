@@ -1,12 +1,17 @@
+.vs
 .xmake
 build
 .DS_Store
 compile_commands.json
 .cache
 .vscode
+.vs
 .claude
 .zed
 vsxmake2022
 ImaginaryProject
 __TERMINA__/INCLUDE
 ReleaseAssets
+*.ipch
+.vs
+imgui.ini
