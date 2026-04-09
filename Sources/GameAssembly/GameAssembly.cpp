@@ -7,6 +7,7 @@
 #include "PhysicsTestComponent.hpp"
 #include "MobComponent.hpp"
 #include "WH/PlayerController.hpp"
+#include "WH/DayNightCycle.hpp"
 #include "WH/PlayerHealth.hpp"
 
 // --- STATIONS ---
@@ -50,6 +51,7 @@ TERMINA_DLL_EXPORT void SetImGuiContext(void* ctx, void* allocFunc, void* freeFu
 // 2. Keep the component registration tightly inside the macros
 COMPONENT_MODULE_BEGIN()
 REGISTER_COMPONENT(PlayerController, "Player Controller")
+REGISTER_COMPONENT(DayNightCycle, "DayNightCycle")
 REGISTER_COMPONENT(FlyCamComponent, "Fly Cam Component")
 REGISTER_COMPONENT(ParticleSystemComponent, "Particle System")
 REGISTER_COMPONENT(PhysicsTestComponent, "Physics Test")
