@@ -5,6 +5,7 @@
 #include "FlyCamComponent.hpp"
 #include "ParticleSystem.hpp"
 #include "PhysicsTestComponent.hpp"
+#include "WH/PlayerController.hpp"
 
 // --- STATIONS ---
 #include "WH/ChoppingBlock.hpp"
@@ -46,6 +47,7 @@ TERMINA_DLL_EXPORT void SetImGuiContext(void* ctx, void* allocFunc, void* freeFu
 
 // 2. Keep the component registration tightly inside the macros
 COMPONENT_MODULE_BEGIN()
+REGISTER_COMPONENT(PlayerController, "Player Controller")
 REGISTER_COMPONENT(FlyCamComponent, "Fly Cam Component")
 REGISTER_COMPONENT(ParticleSystemComponent, "Particle System")
 REGISTER_COMPONENT(PhysicsTestComponent, "Physics Test")
