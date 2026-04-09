@@ -1,0 +1,147 @@
+{
+    "actors": [
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            17.348167419433594,
+                            0.10162204504013062,
+                            38.7810173034668
+                        ],
+                        "rotation": [
+                            0.6362128853797913,
+                            -6.153366882699629e-08,
+                            -0.7715135812759399,
+                            -6.153367593242365e-08
+                        ],
+                        "scale": [
+                            0.9999999403953552,
+                            1.0,
+                            0.9999999403953552
+                        ]
+                    },
+                    "type": "Transform"
+                }
+            ],
+            "id": "5373476845655845829",
+            "name": "TreeGroup",
+            "parentId": null
+        },
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "rotation": [
+                            1.0,
+                            -0.0,
+                            -0.0,
+                            -0.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Transform"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "model": "Assets\\Models\\Furniture\\Group of Trees\\Square\\Group of treesSquare.gltf"
+                    },
+                    "type": "Mesh Component"
+                }
+            ],
+            "id": "10497130729990695433",
+            "name": "TreeGroup_mesh",
+            "parentId": "5373476845655845829"
+        },
+        {
+            "active": true,
+            "components": [
+                {
+                    "active": true,
+                    "data": {
+                        "position": [
+                            0.0,
+                            6.017716884613037,
+                            0.0045948028564453125
+                        ],
+                        "rotation": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Transform"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "half_extents": [
+                            7.670000076293945,
+                            6.489999771118164,
+                            7.579999923706055
+                        ],
+                        "offset": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "rot_off": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ]
+                    },
+                    "type": "Box Collider"
+                },
+                {
+                    "active": true,
+                    "data": {
+                        "allow_sleep": true,
+                        "angular_damping": 0.05000000074505806,
+                        "freeze_pos": [
+                            false,
+                            false,
+                            false
+                        ],
+                        "freeze_rot": [
+                            false,
+                            false,
+                            false
+                        ],
+                        "gravity_factor": 1.0,
+                        "is_sensor": false,
+                        "linear_damping": 0.05000000074505806,
+                        "mass": 1.0,
+                        "type": 1
+                    },
+                    "type": "Rigidbody"
+                }
+            ],
+            "id": "12873373269012558850",
+            "name": "TreeGroup_Hitbox",
+            "parentId": "5373476845655845829"
+        }
+    ],
+    "version": 1
+}
