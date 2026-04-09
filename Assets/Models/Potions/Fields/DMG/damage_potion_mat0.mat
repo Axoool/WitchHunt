@@ -1,5 +1,5 @@
 {
-  "albedo_texture": "Assets\\Models\\Potions\\Fields\\DMG\\field_dmg_BaseColour.png",
+  "albedo_texture": "Assets\\Models\\Potions\\Fields\\DMG\\damage.png",
   "alpha_test": false,
   "color": [
     1.0,
@@ -12,5 +12,5 @@
   "orm_texture": "",
   "override_metallic": false,
   "override_roughness": false,
-  "roughness_factor": 0.5
+  "roughness_factor": 1.0
 }
